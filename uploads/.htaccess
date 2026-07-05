@@ -1,0 +1,10 @@
+# Deny direct access to all files in uploads directory
+# Only allow access to image files
+<FilesMatch "\.(php|php3|php4|php5|phtml|inc|pl|py|jsp|asp|htm|html|shtml|sh|cgi)$">
+    Deny from all
+</FilesMatch>
+
+# Allow direct access to image files
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Allow from all
+</FilesMatch>

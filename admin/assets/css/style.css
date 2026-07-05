@@ -1,0 +1,262 @@
+/* ============================================================
+   Admin Panel Styles
+   ============================================================ */
+
+/* === Global Styles === */
+:root {
+    --sidebar-width: 250px;
+    --header-height: 56px;
+    --primary-color: #2874f0;
+    --sidebar-bg: #1e1e2d;
+    --sidebar-hover: #2a2a3d;
+    --sidebar-active: #2874f0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    padding-top: var(--header-height);
+}
+
+/* === Sidebar Styles === */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--sidebar-bg);
+    color: #fff;
+    z-index: 1000;
+    padding-top: var(--header-height);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: none;
+}
+
+.sidebar .nav-link {
+    color: #a2a3b7;
+    padding: 12px 20px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff;
+    background: var(--sidebar-hover);
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background: var(--sidebar-hover);
+    border-left-color: var(--sidebar-active);
+}
+
+.sidebar .nav-link i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+/* === Main Content Area === */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+    min-height: calc(100vh - var(--header-height));
+}
+
+/* === Dashboard Cards === */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card .card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.stat-card .card-number {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-card .card-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* === Tables === */
+.table-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.product-image-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f8f9fa;
+    padding: 4px;
+    border: 1px solid #eee;
+}
+
+/* === Status Badges === */
+.badge-active {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* === Form Styles === */
+.form-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-card .form-label {
+    font-weight: 500;
+    font-size: 14px;
+    color: #495057;
+}
+
+.form-card .form-control {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    font-size: 14px;
+}
+
+.form-card .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(40, 116, 240, 0.15);
+}
+
+/* === Buttons === */
+.btn-action {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+/* === Image Preview === */
+.image-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+    padding: 8px;
+    background: #f8f9fa;
+}
+
+/* === Alert Messages === */
+.alert-container {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+}
+
+/* === Page Header === */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.page-header h4 {
+    font-weight: 600;
+    margin: 0;
+}
+
+/* === Mobile Sidebar (Offcanvas) === */
+.offcanvas .nav-link {
+    color: #495057;
+    padding: 12px 24px;
+    font-size: 14px;
+}
+
+.offcanvas .nav-link:hover {
+    background: #f0f0f0;
+}
+
+.offcanvas .nav-link.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* === Responsive === */
+@media (max-width: 991.98px) {
+    .sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 15px;
+    }
+    
+    .stat-card .card-number {
+        font-size: 24px;
+    }
+    
+    .table-container {
+        padding: 15px;
+        overflow-x: auto;
+    }
+}

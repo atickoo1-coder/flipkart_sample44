@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickKart - Online Shopping Site</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('img').forEach(function(img) {
+            img.addEventListener('error', function() {
+                if (this.src.indexOf('placeholder.png') === -1) {
+                    this.src = 'uploads/placeholder.png';
+                }
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo-area">
+                <a href="index.html">
+                    <div class="logo-main">QuickKart</div>
+                    <div class="logo-tagline">Explore <span>Plus</span></div>
+                </a>
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="Search for products, brands and more" id="searchInput">
+                <button class="search-btn" aria-label="Search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
+                <ul class="search-suggestions" id="searchSuggestions">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> iPhone 17e</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Ai+ Nova 2 Pro</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Mens Shoes</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Smart Watches</li>
+                </ul>
+            </div>
+
+            <div class="header-actions">
+                <div class="login-btn">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Login
+                        <svg class="chevron" width="10" height="10" viewBox="0 0 14 11"><path d="M3 2L7 6L11 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                    </a>
+                    <div class="login-dropdown">
+                        <div class="login-dropdown-header">
+                            <span>New customer?</span>
+                            <a href="#">Sign Up</a>
+                        </div>
+                        <a href="#" class="login-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            My Profile
+                        </a>
+                        <a href="#" class="login-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            QuickKart Plus Zone
+                        </a>
+                        <a href="#" class="login-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                            Orders
+                        </a>
+                        <a href="#" class="login-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            Wishlist
+                        </a>
+                        <a href="#" class="login-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            Rewards
+                        </a>
+                        <a href="#" class="login-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            Gift Cards
+                        </a>
+                    </div>
+                </div>
+
+                <div class="more-btn">
+                    <a href="#">
+                        More
+                        <svg class="chevron" width="10" height="10" viewBox="0 0 14 11"><path d="M3 2L7 6L11 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                    </a>
+                    <div class="more-dropdown">
+                        <a href="#" class="more-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            Notification Preferences
+                        </a>
+                        <a href="#" class="more-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            24x7 Customer Care
+                        </a>
+                        <a href="#" class="more-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            Advertise
+                        </a>
+                        <a href="#" class="more-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            Download App
+                        </a>
+                    </div>
+                </div>
+
+                <div class="cart-btn">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== NAV BAR ===== -->
+    <nav class="nav-bar">
+        <div class="nav-inner">
+            <a href="#" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                For You
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Fashion
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                Mobiles
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                Beauty
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 12 16.5"/></svg>
+                Electronics
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Home
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+                Appliances
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                Toys, Baby
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                Food & Health
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                Auto
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                2 Wheelers
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 18v-6a5 5 0 0 0-5-5h-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h5"/><path d="M1 18v-6a5 5 0 0 1 5-5h3a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H4"/></svg>
+                Sports & Fitness
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                Books & Media
+            </a>
+            <a href="product-listing.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Furniture
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== HERO BANNER ===== -->
+    <section class="hero-banner">
+        <div class="carousel-container">
+            <div class="carousel-slides" id="carouselSlides">
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #1a237e, #283593); display: flex; flex-direction: column; gap: 12px;">
+                    <div style="font-size: 28px;">Travel & Flights</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Flat 15% Off on IndiGo | Book Now</div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #4a148c, #6a1b9a); flex-direction: column; gap: 12px;">
+                    <div style="font-size: 28px;">Earrings Starting at ₹79</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Festival Collection | Shop Now</div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #b71c1c, #c62828); flex-direction: column; gap: 12px;">
+                    <div style="font-size: 28px;">Ai+ Nova 2 Pro 5G</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Starting from ₹29,999 | Limited Offer</div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #004d40, #00695c); flex-direction: column; gap: 12px;">
+                    <div style="font-size: 28px;">Gillette | P&G Brands</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Up to 40% Off on Grooming Essentials</div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #e65100, #ef6c00); flex-direction: column; gap: 12px;">
+                    <div style="font-size: 28px;">Nothing Phone 2026</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Coming Soon | Be the First to Know</div>
+                </div>
+            </div>
+            <button class="carousel-btn prev" id="carouselPrev">&#8249;</button>
+            <button class="carousel-btn next" id="carouselNext">&#8250;</button>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </section>
+
+    <!-- ===== GRAB OR GONE SECTION ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">Grab or gone</span>
+                <span class="section-subtitle">Best Of Headphones &amp; Speakers</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="deal-grid">
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/headphone/f/y/f/-original-imahy3uqgtzmdsge.jpeg?q=90" alt="Headphones" loading="lazy">
+                <div class="deal-title">boAt, realme, Mivi &amp; more</div>
+                <div class="deal-offer">Min 50% Off</div>
+                <div class="deal-desc">Best Of Headphones &amp; Speakers</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/headphone/t/g/j/t2-tws-earbuds-with-power-bank-40hrs-playtime-asap-charge-hq-original-imagzrefuzkkvbbs.jpeg?q=90" alt="Earbuds" loading="lazy">
+                <div class="deal-title">Best ANC Headphones</div>
+                <div class="deal-offer">Under ₹499</div>
+                <div class="deal-desc">True Wireless Earbuds</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/remote-control-toy/o/k/m/off-roader-rechargeable-remote-control-monster-truck-for-kids-1-original-imagxk4uxjafrzv9.jpeg?q=90" alt="RC Toy" loading="lazy">
+                <div class="deal-title">Remote Control Toys</div>
+                <div class="deal-offer">Min. 40% Off</div>
+                <div class="deal-desc">Grab Big Discounts!</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/ethnic-set/k/y/w/xl-2pc-floral-brown-prisca-original-imahhy72yhwpzpch.jpeg?q=90" alt="Ethnic Set" loading="lazy">
+                <div class="deal-title">Printed Kurta Sets</div>
+                <div class="deal-offer">Under ₹599</div>
+                <div class="deal-desc">Best offer</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TRENDS YOU MAY LIKE ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">Trends you may like</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="trends-grid">
+            <div class="trend-card">
+                <img src="https://rukminim2.flixcart.com/image/468/187/xif0q/jean/o/t/d/28-gtladiesjeans384-guti-original-imahmfvybgrrjyu7.jpeg?q=20" alt="WideLeg" loading="lazy">
+                <div class="trend-label">WideLeg</div>
+            </div>
+            <div class="trend-card">
+                <div style="width:100%;height:220px;background:linear-gradient(135deg,#f5f5f5,#e0e0e0);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:#666;">Stackable</div>
+                <div class="trend-label">Stackable</div>
+            </div>
+            <div class="trend-card">
+                <div style="width:100%;height:220px;background:linear-gradient(135deg,#f5f5f5,#e0e0e0);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:#666;">Baggy</div>
+                <div class="trend-label">Baggy</div>
+            </div>
+            <div class="trend-card">
+                <div style="width:100%;height:220px;background:linear-gradient(135deg,#f5f5f5,#e0e0e0);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:#666;">Oversized</div>
+                <div class="trend-label">Oversized</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BRANDS IN SPOTLIGHT ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">Brands in Spotlight</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="brand-grid">
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/380/510/image/b934afe1dbfcea57.png?q=90" alt="BELLAVITA" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/380/510/image/f65117c377b65da2.png?q=90" alt="Aqualogica" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/380/510/image/8c4dfa10d4890194.png?q=90" alt="FOGG" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/380/510/image/6d65ee27258d977d.png?q=90" alt="Cetaphil" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FASHION'S TOP DEALS ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">Fashion's Top Deals</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="deal-grid">
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/slipper-flip-flop/0/o/j/6-bukaro-5001-tan-06-bukaro-tan-original-imah6tf8fuykvj57.jpeg?q=90" alt="Slippers" loading="lazy">
+                <div class="deal-title">Men's Slippers &amp; Flip Flops</div>
+                <div class="deal-offer">Min. 70% Off</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/shoe/d/l/d/-original-imahgcsfbgserp27.jpeg?q=90" alt="Casual Shoes" loading="lazy">
+                <div class="deal-title">Men's Casual Shoes</div>
+                <div class="deal-offer">Min. 70% Off</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/sandal/u/t/h/7-litewalk-7-liberty-l-grey-enriched-transparent-original-imahezbjbsre8bkb.png?q=90" alt="Sandals" loading="lazy">
+                <div class="deal-title">Men's Sandals &amp; Floaters</div>
+                <div class="deal-offer">Min. 70% Off</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/shoe/w/m/d/-enriched-transparent-original-imahfzfppfdtydqf.png?q=90" alt="Sports Shoes" loading="lazy">
+                <div class="deal-title">Men's Sports Shoes</div>
+                <div class="deal-offer">Min. 70% Off</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HOME DECOR & FURNISHING ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">Home Decor &amp; Furnishing</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="deal-grid">
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/torch/z/y/m/3-1-035-zoomable-metal-5-modes-flashlight-super-bright-cree-t6-original-imahkas8w9fzhxqr.jpeg?q=90" alt="Torch" loading="lazy">
+                <div class="deal-title">Torches</div>
+                <div class="deal-offer">Min. 50% Off</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/wall-clock/e/e/s/-original-imahehwj4ha34tux.jpeg?q=90" alt="Wall Clock" loading="lazy">
+                <div class="deal-title">Wall Clocks</div>
+                <div class="deal-offer">Grab Or Gone</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/mosquito-net/1/y/l/king-size-bed-6-5-6-5-feet-premium-double-bed-machardani-strong-original-imagrfdwmagafdbc.jpeg?q=90" alt="Mosquito Net" loading="lazy">
+                <div class="deal-title">Mosquito Nets</div>
+                <div class="deal-offer">Min. 50% Off</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/bath-towel/i/4/k/fsb-p4-4-30-fsb-p4-flipkart-smartbuy-60-original-imahngg4acndwy2e.jpeg?q=90" alt="Bath Towel" loading="lazy">
+                <div class="deal-title">Bath Towels</div>
+                <div class="deal-offer">Widest Range</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FEATURED BRANDS ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">Featured Brands</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="brand-grid">
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/090233579d80099f.png?q=90" alt="Nothing" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/23411ac03a3ac3c2.png?q=90" alt="Wild Stone" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/a282539cbb770a84.png?q=90" alt="Rodiez" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/39e9b411bc94b663.png?q=90" alt="Lakme" loading="lazy">
+            </div>
+        </div>
+        <div class="brand-grid" style="margin-top:16px;">
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/5d39516d1f9cbb32.png?q=90" alt="Gillette" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/e94195d67cd2078c.png?q=90" alt="Ponds" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/1e091f45f1115187.png?q=90" alt="Deconstruct" loading="lazy">
+            </div>
+            <div class="brand-card">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/350/170/image/d965f4abd0576bc6.png?q=90" alt="Denver" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ON EVERYBODY'S LIST ===== -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <span class="section-title">On everybody's list</span>
+            </div>
+            <button class="view-all-btn">View All</button>
+        </div>
+        <div class="deal-grid">
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/t-shirt/v/y/m/s-pair-mariio-combraided-original-imahg7fpkhz7vkk9.jpeg?q=90" alt="T-shirt" loading="lazy">
+                <div class="deal-title">Men's Tracksuits</div>
+                <div class="deal-offer">Plus-Products</div>
+                <div class="deal-desc">Hand-picked</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/deodorant/u/v/r/600-ultra-sensual-red-legend-200-ml-each-3-deodorant-spray-wild-original-imahez86wcpcphcr.jpeg?q=90" alt="Deodorant" loading="lazy">
+                <div class="deal-title">Grab Or Gone</div>
+                <div class="deal-offer">Min. 50% Off</div>
+                <div class="deal-desc">Plus Products</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/clutch/u/g/a/zbzariheart-zbzariheart-party-wear-clutch-bag-ftsbags-original-imahmzbdpurnxggs.jpeg?q=90" alt="Clutch" loading="lazy">
+                <div class="deal-title">Clutches &amp; Wallets</div>
+                <div class="deal-offer">Special offer</div>
+                <div class="deal-desc">Bestsellers</div>
+            </div>
+            <div class="deal-card">
+                <img class="deal-img" src="https://rukminim2.flixcart.com/image/280/374/xif0q/chocolate/w/w/2/-original-imah4yzhyuefm346.jpeg?q=90" alt="Chocolate" loading="lazy">
+                <div class="deal-title">Chocolates</div>
+                <div class="deal-offer">Special offer</div>
+                <div class="deal-desc">Grab Now</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== INFO STRIP ===== -->
+    <div class="info-strip">
+        <h2>QuickKart - Your go-to place for Online Shopping</h2>
+
+        <h2 style="font-size:14px;color:#878787;font-weight:500;margin-top:16px;">Top Stories :</h2>
+        <div class="top-stories">
+            <a href="#">Brand Directory</a>
+        </div>
+
+        <h3>Most searched for on QuickKart:</h3>
+        <div class="searches">
+            <a href="#">Upcoming GOAT Sale</a><a href="#">Ai+ Nova 2 Pro</a><a href="#">Ai+ Nova 2 Neo</a><a href="#">MOTOROLA Edge 70 Pro Plus</a><a href="#">Type-C Earphones</a><a href="#">Apple Wired Earphones</a><a href="#">AI Laptops</a><a href="#">OPPO Find X9s</a><a href="#">OPPO Find X9 Ultra</a><a href="#">HMD VIBE2</a><a href="#">Motorola G37</a><a href="#">Motorola Razr Fold</a><a href="#">Motorola Edge 70 Pro</a><a href="#">vivo X300 FE</a><a href="#">vivo X300 Ultra</a><a href="#">OPPO F33</a><a href="#">OPPO F33 Pro</a><a href="#">Ai+ Nova Flip</a><a href="#">REDMI Note 15 SE</a><a href="#">iPhone 17e</a><a href="#">vivo V70 FE</a><a href="#">Lumio Projectors</a>
+        </div>
+
+        <h3>Mobiles</h3>
+        <div class="searches">
+            <a href="#">4G Mobiles</a><a href="#">Nokia Phones</a><a href="#">Samsung Mobiles</a><a href="#">Oppo Mobiles</a><a href="#">Apple Phones</a><a href="#">Realme Mobiles</a><a href="#">Nothing Phones</a><a href="#">OnePlus Mobiles</a><a href="#">POCO Mobiles</a><a href="#">Redmi Phones</a><a href="#">Motorola Mobiles</a>
+        </div>
+
+        <h3>Camera</h3>
+        <div class="searches">
+            <a href="#">Nikon Cameras</a><a href="#">Canon Cameras</a><a href="#">Sony Cameras</a><a href="#">Instant Cameras</a><a href="#">DSLR Mirrorless Cameras</a><a href="#">GoPro Cameras</a><a href="#">Drones</a>
+        </div>
+
+        <h3>Laptops</h3>
+        <div class="searches">
+            <a href="#">Apple Laptops</a><a href="#">Acer Laptops</a><a href="#">Lenovo Laptops</a><a href="#">Gaming Laptops</a><a href="#">Dell Laptops</a><a href="#">Asus Laptops</a><a href="#">HP Laptops</a><a href="#">Samsung Laptops</a>
+        </div>
+
+        <h3>TVs</h3>
+        <div class="searches">
+            <a href="#">LG TVs</a><a href="#">Sony TVs</a><a href="#">Samsung TVs</a><a href="#">Mi TVs</a><a href="#">LED TVs</a><a href="#">OLED TVs</a><a href="#">Smart TVs</a><a href="#">4K TVs</a>
+        </div>
+
+        <h3>Large Appliances</h3>
+        <div class="searches">
+            <a href="#">Air Conditioners</a><a href="#">Air Coolers</a><a href="#">Microwave Ovens</a><a href="#">Air Fryers</a><a href="#">Refrigerators</a><a href="#">Washing Machines</a><a href="#">Water Purifiers</a>
+        </div>
+
+        <p style="margin-top:16px;font-size:12px;color:#878787;line-height:1.6;">
+            QuickKart: The One-Stop Shopping Destination. E-commerce is revolutionizing the way we all shop in India. QuickKart is the best online shopping website...
+        </p>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">QuickKart Stories</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Corporate Information</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Help</h4>
+                <ul>
+                    <li><a href="#">Payments</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Cancellation &amp; Returns</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Report Infringement</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Policy</h4>
+                <ul>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Terms Of Use</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                    <li><a href="#">EPR Compliance</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Social</h4>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Mail Us</h4>
+                <p>QuickKart Internet Private Limited,<br>
+                Buildings Alyssa, Begonia &amp;<br>
+                Clove Embassy Tech Village,<br>
+                Outer Ring Road, Devarabeesanahalli Village,<br>
+                Bengaluru, 560103,<br>
+                Karnataka, India</p>
+                <h4 style="margin-top:16px;">Registered Office</h4>
+                <p>QuickKart Internet Private Limited,<br>
+                Buildings Alyssa, Begonia &amp;<br>
+                Clove Embassy Tech Village,<br>
+                Outer Ring Road, Devarabeesanahalli Village,<br>
+                Bengaluru, 560103,<br>
+                Karnataka, India<br>
+                CIN : U51109KA2012PTC066107<br>
+                Telephone: 044-45614700</p>
+            </div>
+        </div>
+
+        <div class="footer-divider">
+            <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Become a Seller
+            </a>
+            <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                Advertise
+            </a>
+            <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                Gift Cards
+            </a>
+            <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                Payment
+            </a>
+            <a href="#">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Customer Care
+            </a>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 QuickKart Clone. This is a design replica for educational purposes only. All rights belong to QuickKart.</p>
+        </div>
+    </footer>
+
+    <script src="js/carousel.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
