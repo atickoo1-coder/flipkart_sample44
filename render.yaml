@@ -10,6 +10,8 @@ services:
     envVars:
       - key: DB_HOST
         sync: false
+      - key: DB_PORT
+        sync: false
       - key: DB_NAME
         sync: false
       - key: DB_USER
