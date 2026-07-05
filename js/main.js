@@ -65,3 +65,30 @@ if (navInner) {
 
     navInner.style.cursor = 'grab';
 }
+
+function showToast(message, type) {
+    type = type || 'success';
+    var container = document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(function () {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 2500);
+}
+
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.wishlist-btn-heart');
+    if (!btn) return;
+    e.preventDefault();
+    btn.classList.toggle('active');
+    btn.setAttribute('data-wishlist', btn.classList.contains('active') ? '1' : '0');
+    showToast(btn.classList.contains('active') ? 'Added to Wishlist' : 'Removed from Wishlist', 'success');
+});

@@ -944,6 +944,7 @@ ul {
 }
 
 .listing-grid .product-card {
+    position: relative;
     background: #fff;
     padding: 16px;
     text-align: center;
