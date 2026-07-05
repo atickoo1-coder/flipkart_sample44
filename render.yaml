@@ -5,7 +5,8 @@ services:
     plan: starter
     branch: main
     dockerfilePath: Dockerfile
-    healthCheckPath: /
+    healthCheckPath: /health.php
+    releaseCommand: bash -lc "mysql -h \"$DB_HOST\" -u \"$DB_USER\" -p\"$DB_PASS\" \"$DB_NAME\" < /var/www/html/database/migration_customer.sql || true"
     envVars:
       - key: DB_HOST
         sync: false

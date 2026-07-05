@@ -51,6 +51,11 @@ function requireCustomerAuth() {
  * Get base URL dynamically
  */
 function getBaseUrl() {
+    $envBaseUrl = getenv('APP_BASE_URL');
+    if (!empty($envBaseUrl)) {
+        return rtrim($envBaseUrl, '/');
+    }
+
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
     return $protocol . '://' . $host . '/flipkart_sample44';
