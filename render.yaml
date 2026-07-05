@@ -1,0 +1,21 @@
+services:
+  - type: web_service
+    name: flipkart-sample44-backend
+    env: docker
+    plan: starter
+    branch: main
+    dockerfilePath: Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: DB_CHARSET
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
