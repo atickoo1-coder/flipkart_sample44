@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "name": "flipkart-sample44-frontend",
+  "builds": [
+    {
+      "src": "**/*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
