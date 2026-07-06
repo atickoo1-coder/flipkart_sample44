@@ -12,9 +12,9 @@
     { "src": "^/(.*)$", "dest": "/$1" }
   ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://flipkart-sample44-backend.onrender.com/api/$1" },
-    { "source": "/uploads/(.*)", "destination": "https://flipkart-sample44-backend.onrender.com/uploads/$1" },
-    { "source": "/(.*\\.php.*)", "destination": "https://flipkart-sample44-backend.onrender.com/$1" }
+    { "source": "/api/(.*)", "destination": "https://your-render-service.onrender.com/api/$1" },
+    { "source": "/uploads/(.*)", "destination": "https://your-render-service.onrender.com/uploads/$1" },
+    { "source": "/(.*\\.php.*)", "destination": "https://your-render-service.onrender.com/$1" }
   ],
   "cleanUrls": true
 }
