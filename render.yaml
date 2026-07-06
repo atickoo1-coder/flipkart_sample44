@@ -1,7 +1,7 @@
 services:
-  - type: web_service
+  - type: web
     name: flipkart-sample44-backend
-    env: docker
+    runtime: docker
     plan: starter
     branch: main
     dockerfilePath: Dockerfile
