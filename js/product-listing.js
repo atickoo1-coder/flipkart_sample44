@@ -1,27 +1,47 @@
 // ===== PRODUCT DATA =====
-var products = [
-    { id: 1, name: 'Apple iPhone 16 Pro Max', brand: 'Apple', price: 159900, origPrice: 169900, discount: 6, rating: 4.6, reviews: 2431, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/c/l/9/-original-imah8zzgztfmpmhn.jpeg?q=90', category: 'Mobiles' },
-    { id: 2, name: 'Samsung Galaxy S25 Ultra', brand: 'Samsung', price: 129999, origPrice: 149999, discount: 13, rating: 4.5, reviews: 1856, ram: '12', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/x/w/o/-original-imah9yh3dspzqzxt.jpeg?q=90', category: 'Mobiles' },
-    { id: 3, name: 'OnePlus 13 Pro', brand: 'OnePlus', price: 69999, origPrice: 79999, discount: 12, rating: 4.4, reviews: 3120, ram: '12', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/l/o/g/-original-imah73ymbfvuxher.jpeg?q=90', category: 'Mobiles' },
-    { id: 4, name: 'Xiaomi 15 Pro', brand: 'Xiaomi', price: 59999, origPrice: 69999, discount: 14, rating: 4.3, reviews: 4521, ram: '12', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/a/p/v/-original-imah8nshhzmpmpp9.jpeg?q=90', category: 'Mobiles' },
-    { id: 5, name: 'Realme GT 8 Pro', brand: 'Realme', price: 34999, origPrice: 42999, discount: 19, rating: 4.2, reviews: 5632, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/t/h/g/-original-imah6zhgrshrnjyg.jpeg?q=90', category: 'Mobiles' },
-    { id: 6, name: 'Vivo X300 Pro', brand: 'Vivo', price: 54999, origPrice: 64999, discount: 15, rating: 4.3, reviews: 2187, ram: '12', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/t/i/5/-original-imah4tztnfrykjch.jpeg?q=90', category: 'Mobiles' },
-    { id: 7, name: 'Oppo Find X9 Pro', brand: 'Oppo', price: 79999, origPrice: 89999, discount: 11, rating: 4.4, reviews: 1432, ram: '16', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/1/m/p/-original-imah74ggmg5ffncz.jpeg?q=90', category: 'Mobiles' },
-    { id: 8, name: 'Apple iPhone 17e', brand: 'Apple', price: 59900, origPrice: 69900, discount: 14, rating: 4.7, reviews: 892, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/v/r/6/-original-imah9y8hzhzznpjy.jpeg?q=90', category: 'Mobiles' },
-    { id: 9, name: 'Samsung Galaxy Z Fold 7', brand: 'Samsung', price: 164999, origPrice: 179999, discount: 8, rating: 4.3, reviews: 654, ram: '12', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/p/f/u/-original-imah7hgyfbhzukmf.jpeg?q=90', category: 'Mobiles' },
-    { id: 10, name: 'OnePlus Nord 5', brand: 'OnePlus', price: 27999, origPrice: 32999, discount: 15, rating: 4.1, reviews: 8743, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/v/e/3/-original-imah5fzsjhpss7j4.jpeg?q=90', category: 'Mobiles' },
-    { id: 11, name: 'Xiaomi Redmi Note 15 Pro', brand: 'Xiaomi', price: 24999, origPrice: 29999, discount: 17, rating: 4.2, reviews: 12453, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/p/h/w/-original-imah6egz5jhhqjpv.jpeg?q=90', category: 'Mobiles' },
-    { id: 12, name: 'Realme Narzo 80 Pro', brand: 'Realme', price: 19999, origPrice: 24999, discount: 20, rating: 4.0, reviews: 9876, ram: '6', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/w/v/l/-original-imah4bxfytsafgnh.jpeg?q=90', category: 'Mobiles' },
-    { id: 13, name: 'Vivo V70 Pro', brand: 'Vivo', price: 32999, origPrice: 39999, discount: 18, rating: 4.1, reviews: 4321, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/w/a/2/-original-imah7f4zh6fg7yup.jpeg?q=90', category: 'Mobiles' },
-    { id: 14, name: 'Oppo Reno 15 Pro', brand: 'Oppo', price: 39999, origPrice: 46999, discount: 15, rating: 4.2, reviews: 3456, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/g/l/x/-original-imah6tfzyzchvfg5.jpeg?q=90', category: 'Mobiles' },
-    { id: 15, name: 'Nothing Phone 3', brand: 'OnePlus', price: 44999, origPrice: 49999, discount: 10, rating: 4.3, reviews: 2134, ram: '12', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/c/n/f/-original-imah8nhstktnyreg.jpeg?q=90', category: 'Mobiles' },
-    { id: 16, name: 'Samsung Galaxy A56 5G', brand: 'Samsung', price: 32999, origPrice: 37999, discount: 13, rating: 4.1, reviews: 6789, ram: '8', img: 'https://rukminim2.flixcart.com/image/280/374/xif0q/mobile/g/l/x/-original-imah6tfzyzchvfg5.jpeg?q=90', category: 'Mobiles' }
-];
-
-var currentProducts = products.slice();
+var products = [];
+var currentProducts = [];
 var currentSort = 'popularity';
 var currentPage = 1;
 var itemsPerPage = 12;
+var backendBase = '/api';
+
+function loadProducts() {
+    fetch(backendBase + '/products.php')
+        .then(function (response) {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(function (data) {
+            if (data && data.success && Array.isArray(data.products)) {
+                products = data.products.map(function (product) {
+                    return {
+                        id: product.id,
+                        name: product.name,
+                        brand: product.brand || 'QuickKart',
+                        price: parseFloat(product.price) || 0,
+                        origPrice: parseFloat(product.original_price) || parseFloat(product.price) || 0,
+                        discount: parseInt(product.discount, 10) || 0,
+                        rating: parseFloat(product.rating) || 0,
+                        reviews: parseInt(product.reviews, 10) || 0,
+                        ram: product.ram || '8',
+                        img: product.image_url || product.image || 'uploads/placeholder.png',
+                        category: product.category_name || 'General'
+                    };
+                });
+                currentProducts = products.slice();
+                updateDisplay();
+            } else {
+                throw new Error('No products returned');
+            }
+        })
+        .catch(function () {
+            var grid = document.getElementById('productGrid');
+            if (grid) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#878787;">Unable to load products right now. Please try again later.</div>';
+            }
+        });
+}
 
 // ===== RENDER PRODUCTS =====
 function renderProducts(productsArray) {
@@ -188,4 +208,4 @@ for (var pi = 0; pi < paginationBtns.length; pi++) {
 }
 
 // ===== INIT =====
-updateDisplay();
+loadProducts();

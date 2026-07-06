@@ -11,5 +11,10 @@
     { "src": "^/$", "dest": "/index.html" },
     { "src": "^/(.*)$", "dest": "/$1" }
   ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://flipkart-sample44-backend.onrender.com/api/$1" },
+    { "source": "/uploads/(.*)", "destination": "https://flipkart-sample44-backend.onrender.com/uploads/$1" },
+    { "source": "/(.*\\.php.*)", "destination": "https://flipkart-sample44-backend.onrender.com/$1" }
+  ],
   "cleanUrls": true
 }
