@@ -65,28 +65,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hashedPassword = password_hash($formData['password'], PASSWORD_DEFAULT);
                 
-                // Store registration data in session for verification
-                $_SESSION['pending_registration'] = [
-                    'full_name' => $formData['full_name'],
-                    'username' => $formData['username'],
-                    'email' => $formData['email'],
-                    'phone' => $formData['phone'],
-                    'password' => $hashedPassword,
-                    'address' => $formData['address'],
-                    'city' => $formData['city'],
-                    'state' => $formData['state'],
-                    'postal_code' => $formData['postal_code']
-                ];
+                $stmt = $pdo->prepare(
+                    "INSERT INTO customers (full_name, username, email, phone, password, address, city, state, postal_code) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                );
+                $stmt->execute([
+                    $formData['full_name'],
+                    $formData['username'],
+                    $formData['email'],
+                    $formData['phone'],
+                    $hashedPassword,
+                    $formData['address'],
+                    $formData['city'],
+                    $formData['state'],
+                    $formData['postal_code']
+                ]);
 
-                // Generate a 6-digit OTP
-                $otp = strval(rand(100000, 999999));
-                $_SESSION['registration_otp'] = $otp;
-                $_SESSION['registration_otp_time'] = time();
+                $_SESSION['customer_id'] = $pdo->lastInsertId();
+                $_SESSION['customer_name'] = $formData['full_name'];
+                $_SESSION['customer_email'] = $formData['email'];
 
-                // Set a mock notification with the OTP for testing
-                setFlashMessage('info', '[MOCK EMAIL] Verification OTP for ' . $formData['email'] . ' is: ' . $otp);
+                setFlashMessage('success', 'Registration successful! Welcome, ' . $formData['full_name'] . '.');
                 
-                header('Location: ' . getBaseUrl() . '/customer/verify_otp.php');
+                $redirect = $_SESSION['redirect_after_login'] ?? null;
+                unset($_SESSION['redirect_after_login']);
+                header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
                 exit();
             }
         } catch (PDOException $e) {
