@@ -68,7 +68,7 @@ try {
     $stmt->execute($params);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $baseUrl = getenv('APP_BASE_URL') ?: (getenv('RENDER_BACKEND_URL') ?: getenv('RENDER_EXTERNAL_URL') ?: 'https://your-render-service.onrender.com');
+    $baseUrl = getenv('APP_BASE_URL') ?: (getenv('RENDER_BACKEND_URL') ?: getenv('RENDER_EXTERNAL_URL') ?: 'https://flipkart-sample44-backend.onrender.com');
     $baseUrl = rtrim($baseUrl, '/');
 
     foreach ($products as &$product) {
