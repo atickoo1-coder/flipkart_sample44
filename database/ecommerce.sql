@@ -4,9 +4,7 @@
 -- Database: ecommerce_db
 -- Created for: quickkart_sample admin panel
 -- ============================================================
-
-CREATE DATABASE IF NOT EXISTS `ecommerce_db`;
-USE `ecommerce_db`;
+-- Database: ecommerce_db (database creation removed for cloud compatibility)
 
 -- ============================================================
 -- Table: admins

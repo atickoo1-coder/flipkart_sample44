@@ -1,21 +1,19 @@
 -- ============================================================
 -- Migration: Customer System Tables & Product Enhancements
 -- Adds customer authentication, cart, orders, and product fields
--- ============================================================
-USE `ecommerce_db`;
-
+-- Database selection removed for cloud compatibility
 -- ============================================================
 -- Add columns to existing products table for customer features
 -- ============================================================
 ALTER TABLE `products`
-    ADD COLUMN IF NOT EXISTS `slug` VARCHAR(200) DEFAULT NULL AFTER `name`,
-    ADD COLUMN IF NOT EXISTS `original_price` DECIMAL(10,2) DEFAULT NULL AFTER `price`,
-    ADD COLUMN IF NOT EXISTS `discount` INT DEFAULT 0 AFTER `original_price`,
-    ADD COLUMN IF NOT EXISTS `rating` DECIMAL(2,1) DEFAULT 0.0 AFTER `stock_quantity`,
-    ADD COLUMN IF NOT EXISTS `reviews` INT DEFAULT 0 AFTER `rating`,
-    ADD COLUMN IF NOT EXISTS `featured` TINYINT(1) DEFAULT 0 AFTER `status`,
-    ADD INDEX IF NOT EXISTS `idx_slug` (`slug`),
-    ADD INDEX IF NOT EXISTS `idx_featured` (`featured`);
+    ADD COLUMN `slug` VARCHAR(200) DEFAULT NULL AFTER `name`,
+    ADD COLUMN `original_price` DECIMAL(10,2) DEFAULT NULL AFTER `price`,
+    ADD COLUMN `discount` INT DEFAULT 0 AFTER `original_price`,
+    ADD COLUMN `rating` DECIMAL(2,1) DEFAULT 0.0 AFTER `stock_quantity`,
+    ADD COLUMN `reviews` INT DEFAULT 0 AFTER `rating`,
+    ADD COLUMN `featured` TINYINT(1) DEFAULT 0 AFTER `status`,
+    ADD INDEX `idx_slug` (`slug`),
+    ADD INDEX `idx_featured` (`featured`);
 
 -- Update product slugs for existing products
 UPDATE `products` SET `slug` = LOWER(REPLACE(REPLACE(REPLACE(`name`, ' ', '-'), ',', ''), '&', 'and')) WHERE `slug` IS NULL;
@@ -24,8 +22,8 @@ UPDATE `products` SET `slug` = LOWER(REPLACE(REPLACE(REPLACE(`name`, ' ', '-'), 
 -- Add slug column to categories
 -- ============================================================
 ALTER TABLE `categories`
-    ADD COLUMN IF NOT EXISTS `slug` VARCHAR(100) DEFAULT NULL AFTER `name`,
-    ADD INDEX IF NOT EXISTS `idx_cat_slug` (`slug`);
+    ADD COLUMN `slug` VARCHAR(100) DEFAULT NULL AFTER `name`,
+    ADD INDEX `idx_cat_slug` (`slug`);
 
 UPDATE `categories` SET `slug` = LOWER(REPLACE(`name`, ' & ', '-')) WHERE `slug` IS NULL;
 UPDATE `categories` SET `slug` = LOWER(REPLACE(`slug`, ' ', '-')) WHERE `slug` LIKE '% %';
