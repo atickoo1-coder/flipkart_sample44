@@ -45,6 +45,26 @@
             .catch(function() {});
     }
 
+    function updateCartBadge(count) {
+        var badge = document.getElementById('cartBadge');
+        if (!badge) return;
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function fetchCartCount() {
+        fetch(baseUrl + '/cart-count.php')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                updateCartBadge(data.count || 0);
+            })
+            .catch(function() {});
+    }
+
     function toggleWishlist(productId, btn) {
         if (!btn) return;
 
@@ -124,11 +144,14 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         fetchWishlistCount();
+        fetchCartCount();
     });
 
     window.showToast = showToast;
     window.toggleWishlist = toggleWishlist;
     window.updateWishlistBadge = updateWishlistBadge;
     window.fetchWishlistCount = fetchWishlistCount;
+    window.updateCartBadge = updateCartBadge;
+    window.fetchCartCount = fetchCartCount;
     window.wishlistBaseUrl = baseUrl;
 })();

@@ -212,6 +212,7 @@ function addToCart(productId, btn) {
     .then(function(data) {
         if (data.success) {
             showToast('Added to cart!', 'success');
+            if (window.fetchCartCount) window.fetchCartCount();
             if (card) {
                 card.remove();
             }
