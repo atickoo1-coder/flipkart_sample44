@@ -52,13 +52,27 @@ function requireCustomerAuth() {
  */
 function getBaseUrl() {
     $envBaseUrl = getenv('APP_BASE_URL');
-    if (!empty($envBaseUrl)) {
+    if (!empty($envBaseUrl) && strpos($envBaseUrl, '<your-render') === false) {
         return rtrim($envBaseUrl, '/');
     }
 
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
-    return $protocol . '://' . $host . '/flipkart_sample44';
+    
+    // Dynamically calculate the script's subdirectory path
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $scriptDir = rtrim(dirname($scriptName), '/\\');
+    
+    // Normalize path if we are in subdirectories
+    $subdirs = ['/customer', '/admin', '/cart', '/products'];
+    foreach ($subdirs as $dir) {
+        if (strpos($scriptName, $dir . '/') !== false) {
+            $scriptDir = rtrim(substr($scriptName, 0, strpos($scriptName, $dir)), '/\\');
+            break;
+        }
+    }
+
+    return $protocol . '://' . $host . $scriptDir;
 }
 
 /**
