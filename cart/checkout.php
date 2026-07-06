@@ -59,6 +59,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
     if (empty($state)) $errors[] = 'State is required';
     if (empty($postalCode)) $errors[] = 'Postal code is required';
 
+    if ($paymentMethod === 'online') {
+        $onlineType = $_POST['online_type'] ?? '';
+        if ($onlineType === 'card') {
+            $cardName = sanitizeInput($_POST['card_name'] ?? '');
+            $cardNumber = sanitizeInput($_POST['card_number'] ?? '');
+            $cardExpiry = sanitizeInput($_POST['card_expiry'] ?? '');
+            $cardCvv = sanitizeInput($_POST['card_cvv'] ?? '');
+
+            if (empty($cardName)) $errors[] = 'Cardholder name is required';
+            if (empty($cardNumber)) $errors[] = 'Card number is required';
+            elseif (strlen(str_replace(' ', '', $cardNumber)) < 16) $errors[] = 'Card number must be 16 digits';
+            
+            if (empty($cardExpiry)) $errors[] = 'Card expiry date is required';
+            elseif (!preg_match('/^(0[1-9]|1[0-2])\/[0-9]{2}$/', $cardExpiry)) $errors[] = 'Invalid expiry date format (MM/YY)';
+            
+            if (empty($cardCvv)) $errors[] = 'Card CVV is required';
+            elseif (strlen($cardCvv) < 3) $errors[] = 'CVV must be 3 digits';
+        } elseif ($onlineType === 'upi') {
+            $upiId = sanitizeInput($_POST['upi_id'] ?? '');
+            if (empty($upiId)) $errors[] = 'UPI ID is required';
+            elseif (strpos($upiId, '@') === false) $errors[] = 'Invalid UPI ID format (must contain @)';
+        } else {
+            $errors[] = 'Please select a valid online payment option (Card or UPI)';
+        }
+    }
+
     if (empty($errors)) {
         try {
             $pdo->beginTransaction();
@@ -229,19 +255,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
             <h3><span class="step">2</span> Payment Method</h3>
             <div class="payment-options">
                 <label class="payment-option">
-                    <input type="radio" name="payment_method" value="cod" checked>
+                    <input type="radio" name="payment_method" value="cod" <?php echo (isset($_POST['payment_method']) && $_POST['payment_method'] === 'cod') || !isset($_POST['payment_method']) ? 'checked' : ''; ?>>
                     <div>
                         <div class="payment-option-label">Cash on Delivery</div>
                         <div class="payment-option-desc">Pay when you receive the order</div>
                     </div>
                 </label>
                 <label class="payment-option">
-                    <input type="radio" name="payment_method" value="online">
+                    <input type="radio" name="payment_method" value="online" <?php echo isset($_POST['payment_method']) && $_POST['payment_method'] === 'online' ? 'checked' : ''; ?>>
                     <div>
                         <div class="payment-option-label">Online Payment</div>
                         <div class="payment-option-desc">Credit/Debit Card, UPI, Net Banking</div>
                     </div>
                 </label>
+            </div>
+
+            <!-- Online Payment Details -->
+            <div id="online_payment_details" class="payment-details-box" style="display: <?php echo isset($_POST['payment_method']) && $_POST['payment_method'] === 'online' ? 'block' : 'none'; ?>; margin-top:16px; padding:20px; border:1px dashed #2874f0; background:#f5faff; border-radius:2px;">
+                <h4 style="font-size:13px; font-weight:600; color:#212121; margin:0 0 12px 0;">Select Payment Option</h4>
+                
+                <div style="display:flex; gap:16px; margin-bottom:16px;">
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px;">
+                        <input type="radio" name="online_type" value="card" <?php echo (isset($_POST['online_type']) && $_POST['online_type'] === 'card') || !isset($_POST['online_type']) ? 'checked' : ''; ?>> Card Details
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px;">
+                        <input type="radio" name="online_type" value="upi" <?php echo isset($_POST['online_type']) && $_POST['online_type'] === 'upi' ? 'checked' : ''; ?>> UPI Option
+                    </label>
+                </div>
+                
+                <!-- Card Details Form -->
+                <div id="card_form_group" style="display: <?php echo (isset($_POST['online_type']) && $_POST['online_type'] === 'card') || !isset($_POST['online_type']) ? 'block' : 'none'; ?>;">
+                    <div class="form-group">
+                        <label for="card_name">Name on Card</label>
+                        <input type="text" id="card_name" name="card_name" value="<?php echo escapeOutput($_POST['card_name'] ?? ''); ?>" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="card_number">Card Number</label>
+                        <input type="text" id="card_number" name="card_number" value="<?php echo escapeOutput($_POST['card_number'] ?? ''); ?>" placeholder="1234 5678 1234 5678" maxlength="19">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card_expiry">Expiry Date</label>
+                            <input type="text" id="card_expiry" name="card_expiry" value="<?php echo escapeOutput($_POST['card_expiry'] ?? ''); ?>" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="card_cvv">CVV</label>
+                            <input type="password" id="card_cvv" name="card_cvv" value="<?php echo escapeOutput($_POST['card_cvv'] ?? ''); ?>" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- UPI Form -->
+                <div id="upi_form_group" style="display: <?php echo isset($_POST['online_type']) && $_POST['online_type'] === 'upi' ? 'block' : 'none'; ?>;">
+                    <div class="form-group">
+                        <label for="upi_id">UPI ID (VPA)</label>
+                        <input type="text" id="upi_id" name="upi_id" value="<?php echo escapeOutput($_POST['upi_id'] ?? ''); ?>" placeholder="example@upi">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -286,5 +356,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Payment method toggle logic
+    document.querySelectorAll('input[name="payment_method"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            var box = document.getElementById('online_payment_details');
+            if (this.value === 'online') {
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
+            }
+        });
+    });
+
+    // Online payment sub-type toggle logic
+    document.querySelectorAll('input[name="online_type"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            var cardForm = document.getElementById('card_form_group');
+            var upiForm = document.getElementById('upi_form_group');
+            if (this.value === 'card') {
+                cardForm.style.display = 'block';
+                upiForm.style.display = 'none';
+            } else {
+                cardForm.style.display = 'none';
+                upiForm.style.display = 'block';
+            }
+        });
+    });
+
+    // Format card number with spaces (1234 5678 1234 5678)
+    var cardNum = document.getElementById('card_number');
+    if (cardNum) {
+        cardNum.addEventListener('input', function(e) {
+            var target = e.target;
+            var position = target.selectionEnd;
+            var length = target.value.length;
+            var value = target.value.replace(/\D/g, '');
+            var formatted = '';
+            for (var i = 0; i < value.length && i < 16; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += value[i];
+            }
+            target.value = formatted;
+            if (position !== length) {
+                target.selectionStart = target.selectionEnd = position;
+            }
+        });
+    }
+
+    // Format expiry date with slash (MM/YY)
+    var cardExp = document.getElementById('card_expiry');
+    if (cardExp) {
+        cardExp.addEventListener('input', function(e) {
+            var value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            } else {
+                e.target.value = value;
+            }
+        });
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/../includes/customer_footer.php'; ?>
