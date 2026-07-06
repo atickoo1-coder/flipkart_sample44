@@ -171,9 +171,9 @@ $categories = $catStmt->fetchAll();
             <div class="filter-section">
                 <h4>Price Range</h4>
                 <div class="price-range-inputs">
-                    <input type="number" name="min_price" placeholder="Min" value="<?php echo $minPrice > 0 ? (int)$minPrice : ''; ?>">
+                    <input type="number" name="min_price" placeholder="Min" value="<?php echo $minPrice > 0 ? (int)$minPrice : ''; ?>" onchange="this.form.submit()">
                     <span>to</span>
-                    <input type="number" name="max_price" placeholder="Max" value="<?php echo $maxPrice > 0 ? (int)$maxPrice : ''; ?>">
+                    <input type="number" name="max_price" placeholder="Max" value="<?php echo $maxPrice > 0 ? (int)$maxPrice : ''; ?>" onchange="this.form.submit()">
                 </div>
                 <button type="submit" class="filter-btn" style="margin-top:8px;">Apply Price</button>
             </div>
