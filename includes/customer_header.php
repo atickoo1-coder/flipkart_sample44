@@ -172,9 +172,6 @@ $baseUrl = getBaseUrl();
             <a href="<?php echo $baseUrl; ?>/products/products.php?category=electronics" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg> Appliances
             </a>
-            <a href="<?php echo $baseUrl; ?>/products/products.php" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Toys, Baby
-            </a>
             <a href="<?php echo $baseUrl; ?>/products/products.php?category=sports" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Sports
             </a>
