@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
 </style>
 
 <div class="checkout-container">
-    <form method="POST" action="" class="checkout-form" novalidate>
+    <form method="POST" action="" class="checkout-form" autocomplete="off" novalidate>
         <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
         <input type="hidden" name="place_order" value="1">
 
@@ -221,33 +221,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
             <div class="form-group">
                 <label for="full_name">Full Name</label>
                 <input type="text" id="full_name" name="full_name" 
-                       value="<?php echo escapeOutput($_POST['full_name'] ?? $customer['full_name'] ?? ''); ?>" required>
+                       value="<?php echo escapeOutput($_POST['full_name'] ?? $customer['full_name'] ?? ''); ?>" autocomplete="off" required>
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" name="phone" 
-                       value="<?php echo escapeOutput($_POST['phone'] ?? $customer['phone'] ?? ''); ?>" required>
+                       value="<?php echo escapeOutput($_POST['phone'] ?? $customer['phone'] ?? ''); ?>" autocomplete="off" required>
             </div>
             <div class="form-group">
                 <label for="address">Address</label>
-                <textarea id="address" name="address" required><?php echo escapeOutput($_POST['address'] ?? $customer['address'] ?? ''); ?></textarea>
+                <textarea id="address" name="address" autocomplete="off" required><?php echo escapeOutput($_POST['address'] ?? $customer['address'] ?? ''); ?></textarea>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="city">City</label>
                     <input type="text" id="city" name="city" 
-                           value="<?php echo escapeOutput($_POST['city'] ?? $customer['city'] ?? ''); ?>" required>
+                           value="<?php echo escapeOutput($_POST['city'] ?? $customer['city'] ?? ''); ?>" autocomplete="off" required>
                 </div>
                 <div class="form-group">
                     <label for="state">State</label>
                     <input type="text" id="state" name="state" 
-                           value="<?php echo escapeOutput($_POST['state'] ?? $customer['state'] ?? ''); ?>" required>
+                           value="<?php echo escapeOutput($_POST['state'] ?? $customer['state'] ?? ''); ?>" autocomplete="off" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="postal_code">Postal Code</label>
                 <input type="text" id="postal_code" name="postal_code" 
-                       value="<?php echo escapeOutput($_POST['postal_code'] ?? $customer['postal_code'] ?? ''); ?>" required>
+                       value="<?php echo escapeOutput($_POST['postal_code'] ?? $customer['postal_code'] ?? ''); ?>" autocomplete="off" required>
             </div>
         </div>
 

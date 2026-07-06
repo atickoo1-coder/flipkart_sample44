@@ -103,17 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="" novalidate>
+            <form method="POST" action="" autocomplete="off" novalidate>
                 <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
 
                 <div class="form-group">
                     <label for="login_input">Email or Username</label>
-                    <input type="text" id="login_input" name="login_input" value="<?php echo escapeOutput($loginInput); ?>" placeholder="Enter email or username" required>
+                    <input type="text" id="login_input" name="login_input" value="<?php echo escapeOutput($loginInput); ?>" placeholder="Enter email or username" autocomplete="off" required>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
                 </div>
 
                 <button type="submit" class="btn-primary">Login</button>

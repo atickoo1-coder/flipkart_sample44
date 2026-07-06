@@ -140,60 +140,60 @@ body { background: #e3f2fd; }
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="" novalidate>
+            <form method="POST" action="" autocomplete="off" novalidate>
                 <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
 
                 <div class="form-group">
                     <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" value="<?php echo escapeOutput($formData['full_name']); ?>" placeholder="Enter your full name" required>
+                    <input type="text" id="full_name" name="full_name" value="<?php echo escapeOutput($formData['full_name']); ?>" placeholder="Enter your full name" autocomplete="off" required>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" name="username" value="<?php echo escapeOutput($formData['username']); ?>" placeholder="Choose a username" required>
+                        <input type="text" id="username" name="username" value="<?php echo escapeOutput($formData['username']); ?>" placeholder="Choose a username" autocomplete="off" required>
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" value="<?php echo escapeOutput($formData['phone']); ?>" placeholder="10-digit mobile number" required>
+                        <input type="tel" id="phone" name="phone" value="<?php echo escapeOutput($formData['phone']); ?>" placeholder="10-digit mobile number" autocomplete="off" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?php echo escapeOutput($formData['email']); ?>" placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" value="<?php echo escapeOutput($formData['email']); ?>" placeholder="Enter your email" autocomplete="off" required>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="At least 6 characters" required>
+                        <input type="password" id="password" name="password" placeholder="At least 6 characters" autocomplete="new-password" required>
                     </div>
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter password" autocomplete="new-password" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="address">Address</label>
-                    <textarea id="address" name="address" placeholder="Street, area, landmark"><?php echo escapeOutput($formData['address']); ?></textarea>
+                    <textarea id="address" name="address" placeholder="Street, area, landmark" autocomplete="off"><?php echo escapeOutput($formData['address']); ?></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input type="text" id="city" name="city" value="<?php echo escapeOutput($formData['city']); ?>" placeholder="City">
+                        <input type="text" id="city" name="city" value="<?php echo escapeOutput($formData['city']); ?>" placeholder="City" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="state">State</label>
-                        <input type="text" id="state" name="state" value="<?php echo escapeOutput($formData['state']); ?>" placeholder="State">
+                        <input type="text" id="state" name="state" value="<?php echo escapeOutput($formData['state']); ?>" placeholder="State" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" id="postal_code" name="postal_code" value="<?php echo escapeOutput($formData['postal_code']); ?>" placeholder="PIN code">
+                    <input type="text" id="postal_code" name="postal_code" value="<?php echo escapeOutput($formData['postal_code']); ?>" placeholder="PIN code" autocomplete="off">
                 </div>
 
                 <button type="submit" class="btn-primary">Register</button>
