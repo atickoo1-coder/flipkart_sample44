@@ -198,6 +198,11 @@ function addToCart(productId, btn) {
     btn.disabled = true;
     btn.textContent = 'Adding...';
 
+    var card = btn.closest('.wishlist-card');
+    if (card) {
+        card.style.opacity = '0.5';
+    }
+
     fetch(baseUrl + '/cart-add.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -207,12 +212,28 @@ function addToCart(productId, btn) {
     .then(function(data) {
         if (data.success) {
             showToast('Added to cart!', 'success');
+            if (card) {
+                card.remove();
+            }
+            if (data.wishlist_count !== undefined) {
+                updateWishlistCount(data.wishlist_count);
+            }
+            var grid = document.querySelector('.wishlist-grid');
+            if (!grid || grid.children.length === 0) {
+                showEmptyState();
+            }
         } else {
             showToast(data.message || 'Failed to add to cart', 'error');
+            if (card) {
+                card.style.opacity = '1';
+            }
         }
     })
     .catch(function() {
         showToast('Something went wrong', 'error');
+        if (card) {
+            card.style.opacity = '1';
+        }
     })
     .finally(function() {
         btn.disabled = false;

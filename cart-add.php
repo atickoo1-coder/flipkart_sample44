@@ -64,9 +64,19 @@ try {
         $stmt->execute([$customerId, $productId, $quantity]);
     }
 
+    // Remove from wishlist if it exists there
+    $stmt = $pdo->prepare("DELETE FROM wishlist WHERE customer_id = ? AND product_id = ?");
+    $stmt->execute([$customerId, $productId]);
+
+    // Count remaining items in wishlist
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM wishlist WHERE customer_id = ?");
+    $stmt->execute([$customerId]);
+    $wishlistCount = (int)$stmt->fetchColumn();
+
     echo json_encode([
         'success' => true,
-        'message' => 'Added to cart!'
+        'message' => 'Added to cart!',
+        'wishlist_count' => $wishlistCount
     ]);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Database error']);
