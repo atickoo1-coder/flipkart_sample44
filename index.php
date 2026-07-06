@@ -218,21 +218,17 @@ $isWishlisted = function($id) use ($wishlistedIds) {
     </div>
 </div>
 
+<?php if (isCustomerLoggedIn()): ?>
 <!-- For You Section -->
 <div class="section" id="for-you" style="scroll-margin-top: 16px;">
     <div class="section-header">
         <h2>For You</h2>
-        <?php if (isCustomerLoggedIn() && !empty($recommendedProducts)): ?>
+        <?php if (!empty($recommendedProducts)): ?>
             <span style="font-size: 13px; color: #878787;">Based on your recent purchase of <strong><?php echo escapeOutput(implode(', ', $lastPurchasedCategoryNames)); ?></strong></span>
         <?php endif; ?>
     </div>
     
-    <?php if (!isCustomerLoggedIn()): ?>
-        <div style="background: #fff; padding: 24px; text-align: center; border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;">
-            <p style="font-size: 14px; color: #666; margin: 0 0 14px 0;">Sign in to see personalized recommendations based on your purchase history.</p>
-            <a href="<?php echo getBaseUrl(); ?>/customer/login.php" class="btn-primary" style="display: inline-block; width: auto; padding: 8px 20px; text-decoration: none; font-size: 13px; border-radius: 2px;">Sign In</a>
-        </div>
-    <?php elseif (empty($recommendedProducts)): ?>
+    <?php if (empty($recommendedProducts)): ?>
         <div style="background: #fff; padding: 24px; text-align: center; border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;">
             <p style="font-size: 14px; color: #666; margin: 0 0 14px 0;">You haven't purchased anything yet! Start shopping to receive personalized recommendations.</p>
             <a href="<?php echo getBaseUrl(); ?>/products/products.php" class="btn-primary" style="display: inline-block; width: auto; padding: 8px 20px; text-decoration: none; font-size: 13px; border-radius: 2px;">Explore Products</a>
@@ -268,6 +264,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
         </div>
     <?php endif; ?>
 </div>
+<?php endif; ?>
 
 <!-- Categories -->
 <div class="section">

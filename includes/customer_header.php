@@ -152,9 +152,11 @@ $baseUrl = getBaseUrl();
     <!-- ===== NAV BAR ===== -->
     <nav class="nav-bar">
         <div class="nav-inner">
-            <a href="<?php echo $baseUrl; ?>/index.php#for-you" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> For You
-            </a>
+            <?php if (isCustomerLoggedIn()): ?>
+                <a href="<?php echo $baseUrl; ?>/index.php#for-you" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> For You
+                </a>
+            <?php endif; ?>
             <a href="<?php echo $baseUrl; ?>/products/products.php?category=fashion" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Fashion
             </a>
