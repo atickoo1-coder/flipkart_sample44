@@ -759,7 +759,7 @@ ul {
     margin: 0 auto;
     padding: 0 16px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 24px;
 }
 

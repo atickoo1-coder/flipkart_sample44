@@ -1,7 +1,7 @@
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="footer-top">
-            <div class="footer-container">
+            <div class="footer-inner">
                 <div class="footer-col">
                     <h4>About</h4>
                     <ul>
@@ -44,7 +44,7 @@
                         <li><a href="#">Instagram</a></li>
                     </ul>
                 </div>
-                <div class="footer-col footer-col-right">
+                <div class="footer-col">
                     <h4>Mail Us:</h4>
                     <p>QuickKart Internet Private Limited,<br>
                     Buildings Alyssa, Begonia &<br>
@@ -52,7 +52,9 @@
                     Outer Ring Road, Devarabeesanahalli Village,<br>
                     Bengaluru, 560103,<br>
                     Karnataka, India</p>
-                    <h4 style="margin-top:24px;">Registered Office Address:</h4>
+                </div>
+                <div class="footer-col">
+                    <h4>Registered Office:</h4>
                     <p>QuickKart Internet Private Limited,<br>
                     Buildings Alyssa, Begonia &<br>
                     Clove Embassy Tech Village,<br>
