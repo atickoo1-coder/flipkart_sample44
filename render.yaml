@@ -6,7 +6,17 @@ services:
     branch: main
     dockerfilePath: Dockerfile
     healthCheckPath: /health.php
-    releaseCommand: bash -lc "mysql -h \"$DB_HOST\" -u \"$DB_USER\" -p\"$DB_PASS\" -e \"CREATE DATABASE IF NOT EXISTS \\\"$DB_NAME\\\";\" && mysql -h \"$DB_HOST\" -u \"$DB_USER\" -p\"$DB_PASS\" \"$DB_NAME\" < /var/www/html/database/ecommerce.sql && mysql -h \"$DB_HOST\" -u \"$DB_USER\" -p\"$DB_PASS\" \"$DB_NAME\" < /var/www/html/database/migration_customer.sql || true"
+    releaseCommand: |
+      bash -lc '
+        DB_HOST=${DB_HOST:-${MYSQLHOST:-}};
+        DB_PORT=${DB_PORT:-${MYSQLPORT:-3306}};
+        DB_NAME=${DB_NAME:-${MYSQLDATABASE:-ecommerce_db}};
+        DB_USER=${DB_USER:-${MYSQLUSER:-root}};
+        DB_PASS=${DB_PASS:-${MYSQLPASSWORD:-}};
+        mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "CREATE DATABASE IF NOT EXISTS \"$DB_NAME\";" &&
+        mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < /var/www/html/database/ecommerce.sql &&
+        mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < /var/www/html/database/migration_customer.sql || true
+      '
     envVars:
       - key: DB_HOST
         sync: false

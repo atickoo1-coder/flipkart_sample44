@@ -6,8 +6,19 @@
  * Uses prepared statements for security against SQL injection.
  */
 
+function getEnvValue(array $keys, $default = null) {
+    foreach ($keys as $key) {
+        $value = getenv($key);
+        if ($value !== false && trim((string) $value) !== '') {
+            return $value;
+        }
+    }
+
+    return $default;
+}
+
 function getDatabaseConfig() {
-    $dbUrl = getenv('DATABASE_URL') ?: getenv('DB_URL');
+    $dbUrl = getEnvValue(['DATABASE_URL', 'DB_URL'], '');
 
     if (!empty($dbUrl)) {
         $parsed = parse_url($dbUrl);
@@ -26,19 +37,19 @@ function getDatabaseConfig() {
                     'name' => $name,
                     'user' => $user,
                     'pass' => $pass,
-                    'charset' => getenv('DB_CHARSET') ?: 'utf8mb4',
+                    'charset' => getEnvValue(['DB_CHARSET'], 'utf8mb4'),
                 ];
             }
         }
     }
 
     return [
-        'host' => getenv('DB_HOST') ?: 'localhost',
-        'port' => getenv('DB_PORT') ?: '3306',
-        'name' => getenv('DB_NAME') ?: 'ecommerce_db',
-        'user' => getenv('DB_USER') ?: 'root',
-        'pass' => getenv('DB_PASS') ?: '',
-        'charset' => getenv('DB_CHARSET') ?: 'utf8mb4',
+        'host' => getEnvValue(['DB_HOST', 'MYSQLHOST', 'MYSQL_HOST'], 'localhost'),
+        'port' => getEnvValue(['DB_PORT', 'MYSQLPORT', 'MYSQL_PORT'], '3306'),
+        'name' => getEnvValue(['DB_NAME', 'MYSQLDATABASE', 'MYSQL_DB', 'MYSQL_DATABASE'], 'ecommerce_db'),
+        'user' => getEnvValue(['DB_USER', 'MYSQLUSER', 'MYSQL_USER'], 'root'),
+        'pass' => getEnvValue(['DB_PASS', 'MYSQLPASSWORD', 'MYSQL_PASS', 'MYSQL_PWD'], ''),
+        'charset' => getEnvValue(['DB_CHARSET'], 'utf8mb4'),
     ];
 }
 

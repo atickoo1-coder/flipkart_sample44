@@ -2,79 +2,101 @@
 $pageTitle = 'Online Shopping Site';
 require_once __DIR__ . '/includes/customer_auth.php';
 
-$pdo = getConnection();
-
-// Featured products
-$stmt = $pdo->query(
-    "SELECT p.*, c.name as category_name 
-     FROM products p 
-     LEFT JOIN categories c ON p.category_id = c.id 
-     WHERE p.status = 1 AND p.featured = 1 
-     ORDER BY p.rating DESC 
-     LIMIT 8"
-);
-$featuredProducts = $stmt->fetchAll();
-
-// Latest products
-$stmt = $pdo->query(
-    "SELECT p.*, c.name as category_name 
-     FROM products p 
-     LEFT JOIN categories c ON p.category_id = c.id 
-     WHERE p.status = 1 
-     ORDER BY p.created_at DESC 
-     LIMIT 12"
-);
-$latestProducts = $stmt->fetchAll();
-
-// Categories for grid
-$stmt = $pdo->query("SELECT id, name, slug FROM categories WHERE status = 1 ORDER BY name LIMIT 6");
-$categories = $stmt->fetchAll();
-
+$pdo = null;
+$dbConnectionError = null;
+$featuredProducts = [];
+$latestProducts = [];
+$categories = [];
 $categoryProducts = [];
-foreach ($categories as $cat) {
-    $stmt = $pdo->prepare(
-        "SELECT id, name, slug, price, original_price, discount, image, rating, reviews 
-         FROM products WHERE category_id = ? AND status = 1 
-         ORDER BY RAND() LIMIT 4"
-    );
-    $stmt->execute([$cat['id']]);
-    $catProducts = $stmt->fetchAll();
-    if (!empty($catProducts)) {
-        $categoryProducts[$cat['id']] = [
-            'name' => $cat['name'],
-            'slug' => $cat['slug'],
-            'products' => $catProducts
-        ];
-    }
-}
-
-// Gather all product IDs for wishlist check
-$allProductIds = array_merge(
-    array_column($featuredProducts, 'id'),
-    array_column($latestProducts, 'id')
-);
-foreach ($categoryProducts as $catData) {
-    foreach ($catData['products'] as $p) {
-        $allProductIds[] = $p['id'];
-    }
-}
-
-// Get wishlisted product IDs for current user
+$allProductIds = [];
 $wishlistedIds = [];
-if (isCustomerLoggedIn() && !empty($allProductIds)) {
-    $allProductIds = array_unique(array_map('intval', $allProductIds));
-    $placeholders = implode(',', array_fill(0, count($allProductIds), '?'));
-    $stmt = $pdo->prepare("SELECT product_id FROM wishlist WHERE customer_id = ? AND product_id IN ($placeholders)");
-    $stmt->execute(array_merge([$_SESSION['customer_id']], $allProductIds));
-    while ($row = $stmt->fetch()) {
-        $wishlistedIds[$row['product_id']] = true;
+
+try {
+    $pdo = getConnection();
+
+    // Featured products
+    $stmt = $pdo->query(
+        "SELECT p.*, c.name as category_name 
+         FROM products p 
+         LEFT JOIN categories c ON p.category_id = c.id 
+         WHERE p.status = 1 AND p.featured = 1 
+         ORDER BY p.rating DESC 
+         LIMIT 8"
+    );
+    $featuredProducts = $stmt->fetchAll();
+
+    // Latest products
+    $stmt = $pdo->query(
+        "SELECT p.*, c.name as category_name 
+         FROM products p 
+         LEFT JOIN categories c ON p.category_id = c.id 
+         WHERE p.status = 1 
+         ORDER BY p.created_at DESC 
+         LIMIT 12"
+    );
+    $latestProducts = $stmt->fetchAll();
+
+    // Categories for grid
+    $stmt = $pdo->query("SELECT id, name, slug FROM categories WHERE status = 1 ORDER BY name LIMIT 6");
+    $categories = $stmt->fetchAll();
+
+    $categoryProducts = [];
+    foreach ($categories as $cat) {
+        $stmt = $pdo->prepare(
+            "SELECT id, name, slug, price, original_price, discount, image, rating, reviews 
+             FROM products WHERE category_id = ? AND status = 1 
+             ORDER BY RAND() LIMIT 4"
+        );
+        $stmt->execute([$cat['id']]);
+        $catProducts = $stmt->fetchAll();
+        if (!empty($catProducts)) {
+            $categoryProducts[$cat['id']] = [
+                'name' => $cat['name'],
+                'slug' => $cat['slug'],
+                'products' => $catProducts
+            ];
+        }
     }
+
+    // Gather all product IDs for wishlist check
+    $allProductIds = array_merge(
+        array_column($featuredProducts, 'id'),
+        array_column($latestProducts, 'id')
+    );
+    foreach ($categoryProducts as $catData) {
+        foreach ($catData['products'] as $p) {
+            $allProductIds[] = $p['id'];
+        }
+    }
+
+    // Get wishlisted product IDs for current user
+    $wishlistedIds = [];
+    if (isCustomerLoggedIn() && !empty($allProductIds)) {
+        $allProductIds = array_unique(array_map('intval', $allProductIds));
+        $placeholders = implode(',', array_fill(0, count($allProductIds), '?'));
+        $stmt = $pdo->prepare("SELECT product_id FROM wishlist WHERE customer_id = ? AND product_id IN ($placeholders)");
+        $stmt->execute(array_merge([$_SESSION['customer_id']], $allProductIds));
+        while ($row = $stmt->fetch()) {
+            $wishlistedIds[$row['product_id']] = true;
+        }
+    }
+} catch (Throwable $e) {
+    $dbConnectionError = $e->getMessage();
 }
+
 $isWishlisted = function($id) use ($wishlistedIds) {
     return isset($wishlistedIds[$id]) ? '1' : '0';
 };
 ?>
 <?php require_once __DIR__ . '/includes/customer_header.php'; ?>
+
+<?php if (!empty($dbConnectionError)): ?>
+<div class="section" style="margin-top:16px;">
+    <div style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:12px 16px;border-radius:4px;">
+        The storefront is currently unavailable because the database connection is not configured yet. Please verify the Render database environment variables.
+    </div>
+</div>
+<?php endif; ?>
 
 <style>
 /* Homepage Banner */
