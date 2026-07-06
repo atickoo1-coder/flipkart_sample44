@@ -206,6 +206,76 @@
             var products = window.shopProducts || [];
             var baseUrl = window.shopBaseUrl || '';
 
+            // Check for filter/search/show intent
+            var isFilterIntent = query.indexOf('filter') !== -1 || query.indexOf('show') !== -1 || query.indexOf('search') !== -1 || query.indexOf('find') !== -1 || query.indexOf('go to') !== -1 || query.indexOf('list') !== -1;
+            
+            if (isFilterIntent) {
+                // Category Slug mapping
+                var categorySlugs = {
+                    'mobile': 'mobiles',
+                    'phone': 'mobiles',
+                    'laptop': 'laptops',
+                    'fashion': 'fashion',
+                    't-shirt': 'fashion',
+                    'shirt': 'fashion',
+                    'wear': 'fashion',
+                    'clothes': 'fashion',
+                    'clothing': 'fashion',
+                    'electronic': 'electronics',
+                    'speaker': 'electronics',
+                    'headphone': 'electronics',
+                    'earphone': 'electronics',
+                    'sofa': 'home-furniture',
+                    'furniture': 'home-furniture',
+                    'home': 'home-furniture',
+                    'beauty': 'beauty',
+                    'cosmetic': 'beauty',
+                    'lipstick': 'beauty',
+                    'lipstic': 'beauty',
+                    'book': 'books',
+                    'sport': 'sports',
+                    'fitness': 'sports'
+                };
+
+                var matchedCatSlug = '';
+                for (var key in categorySlugs) {
+                    if (query.indexOf(key) !== -1) {
+                        matchedCatSlug = categorySlugs[key];
+                        break;
+                    }
+                }
+
+                if (matchedCatSlug) {
+                    var displayCatName = matchedCatSlug.charAt(0).toUpperCase() + matchedCatSlug.slice(1);
+                    if (matchedCatSlug === 'home-furniture') displayCatName = 'Home & Furniture';
+                    setTimeout(function() {
+                        window.location.href = baseUrl + '/products/products.php?category=' + matchedCatSlug;
+                    }, 1200);
+                    return "Sure! I am filtering the catalog to show you **" + displayCatName + "** products. Redirecting you now... 🔄";
+                }
+
+                // Check Specific Product or Brand Search
+                var matchedKeyword = '';
+                for (var j = 0; j < products.length; j++) {
+                    var pName = products[j].name.toLowerCase();
+                    var pBrand = products[j].brand.toLowerCase();
+                    if (query.indexOf(pName) !== -1) {
+                        matchedKeyword = products[j].name;
+                        break;
+                    } else if (query.indexOf(pBrand) !== -1) {
+                        matchedKeyword = products[j].brand;
+                        break;
+                    }
+                }
+
+                if (matchedKeyword) {
+                    setTimeout(function() {
+                        window.location.href = baseUrl + '/products/products.php?search=' + encodeURIComponent(matchedKeyword);
+                    }, 1200);
+                    return "No problem! I am filtering our catalog for '**" + matchedKeyword + "**'. Redirecting you now... 🔄";
+                }
+            }
+
             if (query.match(/^(hi|hello|hey|greetings)/)) {
                 return "Hello! I am your QuickKart Shopping Assistant. How can I help you today? You can ask me to search for categories like Mobiles, Laptops, or specific products!";
             }
