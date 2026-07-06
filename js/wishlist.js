@@ -1,7 +1,9 @@
 (function() {
     'use strict';
 
-    var baseUrl = window.location.protocol + '//' + window.location.host + '/flipkart_sample44';
+    var path = window.location.pathname;
+    var baseSegment = path.indexOf('/flipkart_sample44') !== -1 ? '/flipkart_sample44' : '';
+    var baseUrl = window.location.protocol + '//' + window.location.host + baseSegment;
     var csrfToken = document.querySelector('meta[name="csrf-token"]');
     csrfToken = csrfToken ? csrfToken.getAttribute('content') : '';
 

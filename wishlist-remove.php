@@ -5,26 +5,22 @@ header('Content-Type: application/json');
 
 if (!isCustomerLoggedIn()) {
     $_SESSION['redirect_after_login'] = $_SERVER['HTTP_REFERER'] ?? getBaseUrl() . '/index.php';
-    http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Please login first']);
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Method not allowed']);
     exit();
 }
 
 $productId = (int)($_POST['product_id'] ?? 0);
 if ($productId <= 0) {
-    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Invalid product']);
     exit();
 }
 
 if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
-    http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Invalid security token']);
     exit();
 }
@@ -49,6 +45,5 @@ try {
         'count' => $count
     ]);
 } catch (PDOException $e) {
-    http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database error']);
 }
