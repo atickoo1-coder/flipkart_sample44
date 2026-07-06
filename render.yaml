@@ -2,7 +2,7 @@ services:
   - type: web
     name: flipkart-sample44-backend
     runtime: docker
-    plan: starter
+    plan: free
     branch: main
     dockerfilePath: Dockerfile
     healthCheckPath: /health.php
