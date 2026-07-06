@@ -1,14 +1,18 @@
 <?php
-require_once __DIR__ . '/includes/customer_auth.php';
+require_once __DIR__ . '/config/database.php';
+
+header('Content-Type: application/json');
 
 try {
     $pdo = getConnection();
-    $stmt = $pdo->query('SELECT 1');
-    $stmt->fetch();
-    header('Content-Type: application/json');
-    echo json_encode(['status' => 'ok']);
-} catch (Exception $e) {
-    http_response_code(500);
-    header('Content-Type: application/json');
-    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+    $pdo->query('SELECT 1')->fetch();
+    http_response_code(200);
+    echo json_encode(['status' => 'ok', 'database' => 'connected']);
+} catch (Throwable $e) {
+    http_response_code(200);
+    echo json_encode([
+        'status' => 'degraded',
+        'database' => 'disconnected',
+        'message' => 'Database connection not available yet'
+    ]);
 }
