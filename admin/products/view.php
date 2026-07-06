@@ -86,16 +86,17 @@ $products = $stmt->fetchAll();
                                             <?php if ($product['product_url']): ?>
                                                 <a href="<?php echo htmlspecialchars($product['product_url']); ?>" target="_blank" title="View product">
                                             <?php endif; ?>
-                                            <img src="<?php echo rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/'); ?>/uploads/<?php echo htmlspecialchars($product['image']); ?>" 
+                                            <img src="<?php echo rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/'); ?>/uploads/<?php echo htmlspecialchars($product['image']); ?>" 
                                                  alt="<?php echo htmlspecialchars($product['name']); ?>" 
-                                                 class="product-image-thumb">
+                                                 class="product-image-thumb"
+                                                 onerror="this.src='<?php echo rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/'); ?>/uploads/placeholder.png'">
                                             <?php if ($product['product_url']): ?>
                                                 </a>
                                             <?php endif; ?>
                                         <?php else: ?>
-                                            <div class="product-image-thumb d-flex align-items-center justify-content-center text-muted">
-                                                <i class="bi bi-image" style="font-size: 24px;"></i>
-                                            </div>
+                                            <img src="<?php echo rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/'); ?>/uploads/placeholder.png" 
+                                                 alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                                                 class="product-image-thumb">
                                         <?php endif; ?>
                                     </td>
                                     <td>

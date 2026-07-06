@@ -1035,6 +1035,12 @@ ul {
 .wishlist-btn a svg { vertical-align: middle; }
 .wishlist-badge { position: absolute; top: 0; right: 2px; background: #fb641b; color: #fff; font-size: 10px; font-weight: 600; min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
+/* ===== ADMIN BUTTON ===== */
+.admin-btn { position: relative; display: flex; align-items: center; }
+.admin-btn a { color: #fff; font-size: 14px; font-weight: 500; padding: 6px 10px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.admin-btn a:hover { color: #fff; opacity: 0.85; }
+.admin-btn a svg { width: 18px; height: 18px; vertical-align: middle; }
+
 /* ===== WISHLIST HEART BUTTON ON PRODUCT CARDS ===== */
 .wishlist-btn-heart { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; background: #fff; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.12); z-index: 5; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease; padding: 0; }
 .wishlist-btn-heart:hover { transform: scale(1.15); box-shadow: 0 4px 14px rgba(0,0,0,0.2); }

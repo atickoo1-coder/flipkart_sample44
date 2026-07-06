@@ -6,11 +6,14 @@
  * Supports single image upload with file type and size validation.
  */
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $page_title = 'Add Product';
-require_once __DIR__ . '/../../includes/header.php';
-require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/../../includes/navbar.php';
+
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/auth.php';
+requireAuth();
 
 $pdo = getConnection();
 
@@ -68,13 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (empty($error)) {
                 try {
+                    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
                     $stmt = $pdo->prepare("
-                        INSERT INTO products (category_id, name, description, price, brand, product_url, stock_quantity, image, status)
-                        VALUES (:category_id, :name, :description, :price, :brand, :product_url, :stock_quantity, :image, :status)
+                        INSERT INTO products (category_id, name, slug, description, price, brand, product_url, stock_quantity, image, status)
+                        VALUES (:category_id, :name, :slug, :description, :price, :brand, :product_url, :stock_quantity, :image, :status)
                     ");
                     $stmt->execute([
                         ':category_id' => $category_id,
                         ':name' => $name,
+                        ':slug' => $slug,
                         ':description' => $description,
                         ':price' => $price,
                         ':brand' => $brand,
@@ -151,6 +156,10 @@ function uploadImage($file) {
         return ['success' => false, 'message' => 'Failed to upload image. Please try again.'];
     }
 }
+
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/sidebar.php';
+require_once __DIR__ . '/../../includes/navbar.php';
 ?>
 <div class="main-content">
     <div class="container-fluid">

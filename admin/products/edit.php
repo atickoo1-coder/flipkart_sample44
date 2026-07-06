@@ -5,11 +5,14 @@
  * Handles updating an existing product with image replacement support.
  */
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $page_title = 'Edit Product';
-require_once __DIR__ . '/../../includes/header.php';
-require_once __DIR__ . '/../../includes/sidebar.php';
-require_once __DIR__ . '/../../includes/navbar.php';
+
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/auth.php';
+requireAuth();
 
 $pdo = getConnection();
 
@@ -91,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Handle image removal
-            if ($remove_image && empty($error) && !isset($_FILES['image']) || ($remove_image && $_FILES['image']['error'] !== UPLOAD_ERR_OK)) {
+            if ($remove_image && empty($error) && (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK)) {
                 if ($existingImage && file_exists(__DIR__ . '/../../uploads/' . $existingImage)) {
                     unlink(__DIR__ . '/../../uploads/' . $existingImage);
                 }
@@ -100,9 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (empty($error)) {
                 try {
+                    $slug = $product['slug'] ?: strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
                     $stmt = $pdo->prepare("
                         UPDATE products 
-                        SET category_id = :category_id, name = :name, description = :description, 
+                        SET category_id = :category_id, name = :name, slug = :slug, description = :description, 
                             price = :price, brand = :brand, product_url = :product_url, stock_quantity = :stock_quantity, 
                             image = :image, status = :status
                         WHERE id = :id
@@ -110,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->execute([
                         ':category_id' => $category_id,
                         ':name' => $name,
+                        ':slug' => $slug,
                         ':description' => $description,
                         ':price' => $price,
                         ':brand' => $brand,
@@ -164,6 +169,10 @@ function uploadImage($file) {
         return ['success' => false, 'message' => 'Failed to upload image. Please try again.'];
     }
 }
+
+require_once __DIR__ . '/../../includes/header.php';
+require_once __DIR__ . '/../../includes/sidebar.php';
+require_once __DIR__ . '/../../includes/navbar.php';
 ?>
 <div class="main-content">
     <div class="container-fluid">
@@ -255,8 +264,9 @@ function uploadImage($file) {
                             <div class="mb-3">
                                 <label class="form-label">Current Image</label>
                                 <div>
-                                    <img src="<?php echo rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/'); ?>/uploads/<?php echo htmlspecialchars($existingImage); ?>" 
-                                         alt="Current product image" class="image-preview mb-2">
+                                    <img src="<?php echo rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/'); ?>/uploads/<?php echo htmlspecialchars($existingImage); ?>" 
+                                         alt="Current product image" class="image-preview mb-2"
+                                         onerror="this.src='<?php echo rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/'); ?>/uploads/placeholder.png'">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="remove_image" name="remove_image">
                                         <label class="form-check-label text-danger" for="remove_image">

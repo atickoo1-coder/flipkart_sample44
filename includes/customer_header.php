@@ -132,6 +132,12 @@ $baseUrl = getBaseUrl();
                         <span class="wishlist-badge" id="wishlistBadge" style="display:none;">0</span>
                     </a>
                 </div>
+                <div class="admin-btn">
+                    <a href="<?php echo $baseUrl; ?>/admin/login.php" target="_blank">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/></svg>
+                        Login as Admin
+                    </a>
+                </div>
                 <div class="cart-btn">
                     <a href="<?php echo $baseUrl; ?>/cart/cart.php">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
