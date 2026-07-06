@@ -58,10 +58,48 @@ try {
         }
     }
 
+    // Recommended products based on last purchase
+    $recommendedProducts = [];
+    $lastPurchasedCategoryNames = [];
+    if (isCustomerLoggedIn()) {
+        // Find category IDs from their last orders
+        $stmt = $pdo->prepare(
+            "SELECT DISTINCT p.category_id, c.name as category_name
+             FROM orders o 
+             JOIN order_items oi ON o.id = oi.order_id 
+             JOIN products p ON oi.product_id = p.id 
+             JOIN categories c ON p.category_id = c.id
+             WHERE o.customer_id = ? AND o.order_status != 'cancelled'
+             ORDER BY o.created_at DESC 
+             LIMIT 3"
+        );
+        $stmt->execute([$_SESSION['customer_id']]);
+        $rows = $stmt->fetchAll();
+        
+        if (!empty($rows)) {
+            $catIds = array_column($rows, 'category_id');
+            $lastPurchasedCategoryNames = array_column($rows, 'category_name');
+            $placeholders = implode(',', array_fill(0, count($catIds), '?'));
+            
+            // Get active products in those categories
+            $stmt = $pdo->prepare(
+                "SELECT p.*, c.name as category_name 
+                 FROM products p 
+                 LEFT JOIN categories c ON p.category_id = c.id
+                 WHERE p.category_id IN ($placeholders) AND p.status = 1 
+                 ORDER BY p.featured DESC, p.rating DESC
+                 LIMIT 8"
+            );
+            $stmt->execute($catIds);
+            $recommendedProducts = $stmt->fetchAll();
+        }
+    }
+
     // Gather all product IDs for wishlist check
     $allProductIds = array_merge(
         array_column($featuredProducts, 'id'),
-        array_column($latestProducts, 'id')
+        array_column($latestProducts, 'id'),
+        array_column($recommendedProducts, 'id')
     );
     foreach ($categoryProducts as $catData) {
         foreach ($catData['products'] as $p) {
@@ -178,6 +216,57 @@ $isWishlisted = function($id) use ($wishlistedIds) {
             </div>
         </div>
     </div>
+</div>
+
+<!-- For You Section -->
+<div class="section" id="for-you" style="scroll-margin-top: 16px;">
+    <div class="section-header">
+        <h2>For You</h2>
+        <?php if (isCustomerLoggedIn() && !empty($recommendedProducts)): ?>
+            <span style="font-size: 13px; color: #878787;">Based on your recent purchase of <strong><?php echo escapeOutput(implode(', ', $lastPurchasedCategoryNames)); ?></strong></span>
+        <?php endif; ?>
+    </div>
+    
+    <?php if (!isCustomerLoggedIn()): ?>
+        <div style="background: #fff; padding: 24px; text-align: center; border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;">
+            <p style="font-size: 14px; color: #666; margin: 0 0 14px 0;">Sign in to see personalized recommendations based on your purchase history.</p>
+            <a href="<?php echo getBaseUrl(); ?>/customer/login.php" class="btn-primary" style="display: inline-block; width: auto; padding: 8px 20px; text-decoration: none; font-size: 13px; border-radius: 2px;">Sign In</a>
+        </div>
+    <?php elseif (empty($recommendedProducts)): ?>
+        <div style="background: #fff; padding: 24px; text-align: center; border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;">
+            <p style="font-size: 14px; color: #666; margin: 0 0 14px 0;">You haven't purchased anything yet! Start shopping to receive personalized recommendations.</p>
+            <a href="<?php echo getBaseUrl(); ?>/products/products.php" class="btn-primary" style="display: inline-block; width: auto; padding: 8px 20px; text-decoration: none; font-size: 13px; border-radius: 2px;">Explore Products</a>
+        </div>
+    <?php else: ?>
+        <div class="product-grid">
+            <?php foreach ($recommendedProducts as $product): ?>
+                <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="product-card">
+                    <div class="product-card-img" style="position:relative;">
+                        <button class="wishlist-btn-heart <?php echo $isWishlisted($product['id']) === '1' ? 'active' : ''; ?>" data-product-id="<?php echo (int)$product['id']; ?>" data-wishlisted="<?php echo $isWishlisted($product['id']); ?>" title="<?php echo $isWishlisted($product['id']) === '1' ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>" onclick="event.stopPropagation();event.preventDefault();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                        <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
+                             alt="<?php echo escapeOutput($product['name']); ?>"
+                             onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
+                    </div>
+                    <div class="product-card-body">
+                        <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
+                        <?php if ($product['brand']): ?>
+                            <div class="product-card-brand"><?php echo escapeOutput($product['brand']); ?></div>
+                        <?php endif; ?>
+                        <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
+                        <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
+                            <span class="product-card-original">&#8377;<?php echo number_format($product['original_price']); ?></span>
+                            <span class="product-card-discount"><?php echo (int)$product['discount']; ?>% off</span>
+                        <?php endif; ?>
+                        <?php if ($product['rating'] > 0): ?>
+                            <div><span class="product-card-rating"><?php echo number_format($product['rating'], 1); ?>&#9733;</span><span class="product-card-reviews">(<?php echo (int)$product['reviews']; ?>)</span></div>
+                        <?php endif; ?>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 <!-- Categories -->
