@@ -350,31 +350,145 @@ $isWishlisted = function($id) use ($wishlistedIds) {
         <h2><?php echo escapeOutput($catData['name']); ?></h2>
         <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=<?php echo escapeOutput($catData['slug']); ?>">View All &rarr;</a>
     </div>
-    <div class="product-row">
-        <?php foreach ($catData['products'] as $product): ?>
-            <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="product-card">
-                <div class="product-card-img" style="position:relative;">
-                    <button class="wishlist-btn-heart <?php echo $isWishlisted($product['id']) === '1' ? 'active' : ''; ?>" data-product-id="<?php echo (int)$product['id']; ?>" data-wishlisted="<?php echo $isWishlisted($product['id']); ?>" title="<?php echo $isWishlisted($product['id']) === '1' ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>" onclick="event.stopPropagation();event.preventDefault();">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </button>
-                    <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
-                         alt="<?php echo escapeOutput($product['name']); ?>"
-                         onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
-                </div>
-                <div class="product-card-body">
-                    <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
-                    <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
-                    <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
-                        <span class="product-card-original">&#8377;<?php echo number_format($product['original_price']); ?></span>
-                        <span class="product-card-discount"><?php echo (int)$product['discount']; ?>% off</span>
-                    <?php endif; ?>
-                    <?php if ($product['rating'] > 0): ?>
-                        <div><span class="product-card-rating"><?php echo number_format($product['rating'], 1); ?>&#9733;</span><span class="product-card-reviews">(<?php echo (int)$product['reviews']; ?>)</span></div>
-                    <?php endif; ?>
-                </div>
-            </a>
-        <?php endforeach; ?>
-    </div>
+    
+    <?php if ($catData['slug'] === 'mobiles'): ?>
+        <style>
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px 0;
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            border: 1px solid #f0f0f0;
+        }
+        .marquee-content {
+            display: flex;
+            gap: 24px;
+            width: max-content;
+            animation: marquee-scroll 20s linear infinite;
+        }
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+        .marquee-item {
+            width: 200px;
+            flex-shrink: 0;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 16px 12px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .marquee-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-color: #2874f0;
+        }
+        .marquee-img-box {
+            width: 130px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .marquee-img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .marquee-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #212121;
+            margin: 4px 0 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        .marquee-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #212121;
+        }
+        @keyframes marquee-scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        </style>
+        <?php
+        // Fetch all active Mobiles to construct the moving banner marquee
+        try {
+            $stmtM = $pdo->prepare(
+                "SELECT id, name, slug, price, original_price, discount, image, rating, reviews, brand 
+                 FROM products WHERE category_id = ? AND status = 1 
+                 ORDER BY price DESC"
+            );
+            $stmtM->execute([$catId]);
+            $allMobiles = $stmtM->fetchAll();
+        } catch (Exception $e) {
+            $allMobiles = $catData['products'];
+        }
+        
+        // Repeat the product array to create a continuous infinite scrolling effect
+        $marqueeItems = array_merge($allMobiles, $allMobiles, $allMobiles, $allMobiles);
+        ?>
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <?php foreach ($marqueeItems as $product): ?>
+                    <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="marquee-item">
+                        <div class="marquee-img-box">
+                            <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
+                                 alt="<?php echo escapeOutput($product['name']); ?>"
+                                 onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
+                        </div>
+                        <div class="marquee-title"><?php echo escapeOutput($product['name']); ?></div>
+                        <div class="marquee-price">&#8377;<?php echo number_format($product['price']); ?></div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="product-row">
+            <?php foreach ($catData['products'] as $product): ?>
+                <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="product-card">
+                    <div class="product-card-img" style="position:relative;">
+                        <button class="wishlist-btn-heart <?php echo $isWishlisted($product['id']) === '1' ? 'active' : ''; ?>" data-product-id="<?php echo (int)$product['id']; ?>" data-wishlisted="<?php echo $isWishlisted($product['id']); ?>" title="<?php echo $isWishlisted($product['id']) === '1' ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>" onclick="event.stopPropagation();event.preventDefault();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                        <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
+                             alt="<?php echo escapeOutput($product['name']); ?>"
+                             onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
+                    </div>
+                    <div class="product-card-body">
+                        <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
+                        <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
+                        <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
+                            <span class="product-card-original">&#8377;<?php echo number_format($product['original_price']); ?></span>
+                            <span class="product-card-discount"><?php echo (int)$product['discount']; ?>% off</span>
+                        <?php endif; ?>
+                        <?php if ($product['rating'] > 0): ?>
+                            <div><span class="product-card-rating"><?php echo number_format($product['rating'], 1); ?>&#9733;</span><span class="product-card-reviews">(<?php echo (int)$product['reviews']; ?>)</span></div>
+                        <?php endif; ?>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 <?php endforeach; ?>
 
