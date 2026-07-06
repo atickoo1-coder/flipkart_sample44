@@ -196,11 +196,8 @@ $isWishlisted = function($id) use ($wishlistedIds) {
 <!-- Banner -->
 <div class="banner-section">
     <div class="banner-slider">
-        <div class="banner-main">
-            <h1>Biggest Sale of the Year!</h1>
-            <p>Up to 70% off on top brands. Limited time offer. Shop now and save big!</p>
-            <a href="<?php echo getBaseUrl(); ?>/products/products.php">Shop Now</a>
-        </div>
+        <a href="<?php echo getBaseUrl(); ?>/products/products.php" class="banner-main" style="background: url('<?php echo getBaseUrl(); ?>/assets/biggest_sale_banner.png') no-repeat center center; background-size: cover; padding: 0; min-height: 240px; display: block;">
+        </a>
         <div class="banner-side">
             <div class="banner-side-item">
                 <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=mobiles">
