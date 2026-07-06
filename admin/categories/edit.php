@@ -60,14 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($check->fetch()) {
                     $error = 'A category with this name already exists.';
                 } else {
+                    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
                     // Update category
                     $stmt = $pdo->prepare("
                         UPDATE categories 
-                        SET name = :name, description = :description, status = :status 
+                        SET name = :name, slug = :slug, description = :description, status = :status 
                         WHERE id = :id
                     ");
                     $stmt->execute([
                         ':name' => $name,
+                        ':slug' => $slug,
                         ':description' => $description,
                         ':status' => $new_status,
                         ':id' => $id,

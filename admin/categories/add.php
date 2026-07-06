@@ -46,13 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($check->fetch()) {
                     $error = 'A category with this name already exists.';
                 } else {
+                    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
                     // Insert category
                     $stmt = $pdo->prepare("
-                        INSERT INTO categories (name, description, status) 
-                        VALUES (:name, :description, :status)
+                        INSERT INTO categories (name, slug, description, status) 
+                        VALUES (:name, :slug, :description, :status)
                     ");
                     $stmt->execute([
                         ':name' => $name,
+                        ':slug' => $slug,
                         ':description' => $description,
                         ':status' => $status,
                     ]);

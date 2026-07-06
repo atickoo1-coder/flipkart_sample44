@@ -27,6 +27,8 @@ if (searchInput && searchSuggestions) {
         item.addEventListener('click', function () {
             searchInput.value = this.textContent.trim();
             searchSuggestions.classList.remove('active');
+            var form = searchInput.closest('form');
+            if (form) form.submit();
         });
     });
 }
