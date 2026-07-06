@@ -33,6 +33,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['customer_name'] = $customer['full_name'];
                 $_SESSION['customer_email'] = $customer['email'];
 
+                // Execute pending cart action if exists
+                if (!empty($_SESSION['pending_cart_action'])) {
+                    $pending = $_SESSION['pending_cart_action'];
+                    unset($_SESSION['pending_cart_action']);
+                    try {
+                        $stmtC = $pdo->prepare("SELECT id, quantity FROM cart WHERE customer_id = ? AND product_id = ?");
+                        $stmtC->execute([$_SESSION['customer_id'], $pending['product_id']]);
+                        $existing = $stmtC->fetch();
+
+                        $stmtP = $pdo->prepare("SELECT stock_quantity FROM products WHERE id = ?");
+                        $stmtP->execute([$pending['product_id']]);
+                        $productInfo = $stmtP->fetch();
+
+                        if ($productInfo) {
+                            $qty = min($pending['quantity'], $productInfo['stock_quantity']);
+                            if ($existing) {
+                                $newQty = min($existing['quantity'] + $qty, $productInfo['stock_quantity']);
+                                $stmtU = $pdo->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
+                                $stmtU->execute([$newQty, $existing['id']]);
+                            } else {
+                                $stmtI = $pdo->prepare("INSERT INTO cart (customer_id, product_id, quantity) VALUES (?, ?, ?)");
+                                $stmtI->execute([$_SESSION['customer_id'], $pending['product_id'], $qty]);
+                            }
+                        }
+                    } catch (Exception $e) {
+                        // Ignore
+                    }
+                }
+
                 setFlashMessage('success', 'Welcome back, ' . $customer['full_name'] . '!');
 
                 $redirect = $_SESSION['redirect_after_login'] ?? null;

@@ -251,6 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
                 <form method="POST" action="">
                     <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                     <input type="hidden" name="add_to_cart" value="1">
+                    <input type="hidden" name="product_id" value="<?php echo (int)$product['id']; ?>">
 
                     <div class="product-actions">
                         <div class="qty-selector">

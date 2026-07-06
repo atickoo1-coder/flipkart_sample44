@@ -1,12 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/customer_auth.php';
 
-if (!isCustomerLoggedIn()) {
-    $_SESSION['redirect_after_login'] = $_SERVER['HTTP_REFERER'] ?? getBaseUrl() . '/products/products.php';
-    header('Location: ' . getBaseUrl() . '/customer/login.php');
-    exit();
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . getBaseUrl() . '/products/products.php');
     exit();
@@ -18,6 +12,21 @@ $redirectCheckout = isset($_GET['redirect_checkout']) || isset($_POST['redirect_
 
 if ($productId <= 0) {
     header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? getBaseUrl() . '/products/products.php'));
+    exit();
+}
+
+if (!isCustomerLoggedIn()) {
+    // Store cart intent in session to execute after login
+    $_SESSION['pending_cart_action'] = [
+        'product_id' => $productId,
+        'quantity' => $quantity,
+        'redirect_checkout' => $redirectCheckout
+    ];
+    $_SESSION['redirect_after_login'] = $redirectCheckout 
+        ? getBaseUrl() . '/cart/checkout.php' 
+        : getBaseUrl() . '/cart/cart.php';
+        
+    header('Location: ' . getBaseUrl() . '/customer/login.php');
     exit();
 }
 
