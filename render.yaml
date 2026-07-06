@@ -6,40 +6,6 @@ services:
     branch: main
     dockerfilePath: Dockerfile
     healthCheckPath: /health.php
-    releaseCommand: |
-      bash -lc '
-        if [ -n "${DATABASE_URL:-}" ]; then
-          proto_url="${DATABASE_URL#mysql://}"
-          userpass="${proto_url%%@*}"
-          hostportdb="${proto_url#*@}"
-          DB_USER="${userpass%%:*}"
-          DB_PASS="${userpass#*:}"
-          hostport="${hostportdb%%/*}"
-          DB_NAME="${hostportdb#*/}"
-          DB_NAME="${DB_NAME%%\?*}"
-          DB_HOST="${hostport%%:*}"
-          if [[ "$hostport" == *":"* ]]; then
-            DB_PORT="${hostport#*:}"
-          else
-            DB_PORT="3306"
-          fi
-        else
-          DB_HOST=${DB_HOST:-${MYSQLHOST:-}};
-          DB_PORT=${DB_PORT:-${MYSQLPORT:-3306}};
-          DB_NAME=${DB_NAME:-${MYSQLDATABASE:-ecommerce_db}};
-          DB_USER=${DB_USER:-${MYSQLUSER:-root}};
-          DB_PASS=${DB_PASS:-${MYSQLPASSWORD:-}};
-        fi
-
-        echo "Ensuring database exists (if permitted)..."
-        mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;" || true
-
-        echo "Importing ecommerce.sql..."
-        mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < /var/www/html/database/ecommerce.sql || true
-
-        echo "Importing migration_customer.sql..."
-        mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < /var/www/html/database/migration_customer.sql || true
-      '
     envVars:
       - key: DB_HOST
         sync: false
