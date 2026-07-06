@@ -1,0 +1,2 @@
+# Set index.php as the default index file to prioritize the dynamic PHP application over the static HTML placeholder.
+DirectoryIndex index.php index.html

@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </form>
 
                         <div class="text-center mt-3">
-                            <a href="<?php echo rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/'); ?>/index.html" class="text-decoration-none">
+                            <a href="<?php echo rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/'); ?>/index.php" class="text-decoration-none">
                                 <i class="bi bi-arrow-left me-1"></i>Back to Website
                             </a>
                         </div>
