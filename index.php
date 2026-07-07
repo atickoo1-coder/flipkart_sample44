@@ -204,9 +204,99 @@ $isWishlisted = function($id) use ($wishlistedIds) {
 .category-product-section .product-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
 .featured-badge { position: absolute; top: 8px; left: 8px; background: #fb641b; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 2px; font-weight: 500; }
 
+
+/* Category Promo Grid Layout (Fashion-style layout for all categories) */
+.category-section-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 16px;
+    align-items: stretch;
+}
+.category-promo-card {
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid #f0f0f0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    padding: 24px;
+    text-decoration: none;
+    color: #fff;
+    min-height: 240px;
+    background: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.category-promo-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+.category-promo-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+.category-promo-card:hover .category-promo-bg {
+    transform: scale(1.04);
+}
+.category-promo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%);
+    z-index: 2;
+}
+.category-promo-content {
+    position: relative;
+    z-index: 3;
+    color: #fff;
+}
+.category-promo-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.category-promo-content p {
+    font-size: 13px;
+    margin: 0 0 16px 0;
+    color: #f0f4f8;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    line-height: 1.4;
+}
+.category-promo-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #fb641b;
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    transition: background 0.2s;
+    border: none;
+    text-align: center;
+    width: fit-content;
+}
+.category-promo-btn:hover {
+    background: #e5530b;
+}
+
 @media (max-width: 768px) {
     .banner-slider { grid-template-columns: 1fr; }
     .product-grid, .category-product-section .product-row { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .category-section-layout {
+        grid-template-columns: 1fr;
+    }
+    .category-promo-card {
+        min-height: 180px;
+    }
 }
 </style>
 
@@ -389,6 +479,55 @@ $isWishlisted = function($id) use ($wishlistedIds) {
 </div>
 <?php endif; ?>
 
+<?php
+$promoConfig = [
+    'mobiles' => [
+        'title' => 'Smartphones',
+        'desc' => 'Upgrade to the latest smartphones with top-tier cameras and spectacular deals.',
+        'bg' => getBaseUrl() . '/uploads/mobiles_1.jpg'
+    ],
+    'laptops' => [
+        'title' => 'Laptops',
+        'desc' => 'High performance laptops for productivity, gaming, and entertainment.',
+        'bg' => getBaseUrl() . '/uploads/laptops_2.jpg'
+    ],
+    'fashion' => [
+        'title' => 'Fashion Store',
+        'desc' => 'Upgrade your style with our latest trends and curated premium fashion collection.',
+        'bg' => getBaseUrl() . '/uploads/fashion_1.jpg'
+    ],
+    'electronics' => [
+        'title' => 'Electronics',
+        'desc' => 'Explore top smart tech, premium headphones, speakers, and smart gadgets.',
+        'bg' => getBaseUrl() . '/uploads/electronics_1.jpg'
+    ],
+    'home-furniture' => [
+        'title' => 'Home Decor',
+        'desc' => 'Make your living space beautiful with modern decor ideas and organizers.',
+        'bg' => getBaseUrl() . '/uploads/home_1.jpg'
+    ],
+    'beauty' => [
+        'title' => 'Beauty Care',
+        'desc' => 'Pamper yourself with premium skincare, makeup, and organic wellness essentials.',
+        'bg' => getBaseUrl() . '/uploads/beauty_1.jpg'
+    ],
+    'books' => [
+        'title' => 'Book Store',
+        'desc' => 'Discover best-selling novels, educational textbooks, and self-help literature.',
+        'bg' => getBaseUrl() . '/uploads/book_1.jpg'
+    ],
+    'sports' => [
+        'title' => 'Sports & Fitness',
+        'desc' => 'Get active with top-grade fitness equipment, sportswear, and outdoor gear.',
+        'bg' => getBaseUrl() . '/uploads/sports_1.jpg'
+    ],
+    'furniture' => [
+        'title' => 'Furniture',
+        'desc' => 'Premium wooden coffee tables, office chairs, sofas, and luxury bedding.',
+        'bg' => getBaseUrl() . '/uploads/furniture_1.jpg'
+    ]
+];
+?>
 <!-- Category Product Sections -->
 <?php foreach ($categoryProducts as $catId => $catData): ?>
 <div class="category-product-section">
@@ -396,346 +535,25 @@ $isWishlisted = function($id) use ($wishlistedIds) {
         <h2><?php echo escapeOutput($catData['name']); ?></h2>
         <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=<?php echo escapeOutput($catData['slug']); ?>">View All &rarr;</a>
     </div>
-    
-    <?php if ($catData['slug'] === 'mobiles'): ?>
-        <style>
-        .mobiles-section-layout {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            gap: 16px;
-            align-items: stretch;
-        }
-        .mobiles-promo-card {
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            border: 1px solid #f0f0f0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            position: relative;
-            padding: 24px;
-            text-decoration: none;
-            color: #fff;
-            min-height: 240px;
-            background: #fff;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .mobiles-promo-card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-        .mobiles-promo-bg {
-            position: absolute;
-            inset: 0;
-            background: url('<?php echo getBaseUrl(); ?>/assets/smartphones_banner.png') no-repeat center center;
-            background-size: cover;
-            z-index: 1;
-            transition: transform 0.3s ease;
-        }
-        .mobiles-promo-card:hover .mobiles-promo-bg {
-            transform: scale(1.04);
-        }
-        .mobiles-promo-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.05) 100%);
-            z-index: 2;
-        }
-        .mobiles-promo-content {
-            position: relative;
-            z-index: 3;
-            color: #fff;
-        }
-        .mobiles-promo-content h3 {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 6px 0;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-        }
-        .mobiles-promo-content p {
-            font-size: 13px;
-            margin: 0 0 16px 0;
-            color: #f0f4f8;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-            line-height: 1.4;
-        }
-        .mobiles-promo-btn {
-            display: inline-block;
-            padding: 8px 18px;
-            background: #fb641b;
-            color: #fff;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            border-radius: 2px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background 0.2s;
-            border: none;
-        }
-        .mobiles-promo-btn:hover {
-            background: #e5530b;
-        }
-        .marquee-container {
-            width: 100%;
-            overflow: hidden;
-            background: #fff;
-            padding: 20px 0;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            position: relative;
-            border: 1px solid #f0f0f0;
-            margin: 0;
-        }
-        .marquee-content {
-            display: flex;
-            gap: 24px;
-            width: max-content;
-            animation: marquee-scroll 20s linear infinite;
-        }
-        .marquee-container:hover .marquee-content {
-            animation-play-state: paused;
-        }
-        .marquee-item {
-            width: 200px;
-            flex-shrink: 0;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            padding: 16px 12px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .marquee-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            border-color: #2874f0;
-        }
-        .marquee-img-box {
-            width: 130px;
-            height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            position: relative;
-        }
-        .marquee-img-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .marquee-title {
-            font-size: 13px;
-            font-weight: 500;
-            color: #212121;
-            margin: 4px 0 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-        .marquee-price {
-            font-size: 14px;
-            font-weight: 600;
-            color: #212121;
-        }
-        @keyframes marquee-scroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-        @media (max-width: 768px) {
-            .mobiles-section-layout {
-                grid-template-columns: 1fr;
-            }
-            .mobiles-promo-card {
-                min-height: 180px;
-            }
-        }
-        </style>
-        <?php
-        // Fetch all active Mobiles to construct the moving banner marquee
-        try {
-            $stmtM = $pdo->prepare(
-                "SELECT id, name, slug, price, original_price, discount, image, rating, reviews, brand 
-                 FROM products WHERE category_id = ? AND status = 1 
-                 ORDER BY price DESC"
-            );
-            $stmtM->execute([$catId]);
-            $allMobiles = $stmtM->fetchAll();
-        } catch (Exception $e) {
-            $allMobiles = $catData['products'];
-        }
-        
-        // Repeat the product array to create a continuous infinite scrolling effect
-        $marqueeItems = array_merge($allMobiles, $allMobiles, $allMobiles, $allMobiles);
-        ?>
-        <div class="mobiles-section-layout">
-            <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=mobiles" class="mobiles-promo-card">
-                <div class="mobiles-promo-bg"></div>
-                <div class="mobiles-promo-overlay"></div>
-                <div class="mobiles-promo-content">
-                    <h3>Smartphones</h3>
-                    <p>Upgrade to the latest smartphones with top-tier cameras, high-performance chipsets, and spectacular deals.</p>
-                    <span class="mobiles-promo-btn">Shop Now</span>
-                </div>
-            </a>
-            
-            <div class="marquee-container">
-                <div class="marquee-content">
-                    <?php foreach ($marqueeItems as $product): ?>
-                        <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="marquee-item">
-                            <div class="marquee-img-box">
-                                <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
-                                     alt="<?php echo escapeOutput($product['name']); ?>"
-                                     loading="lazy"
-                                     onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
-                            </div>
-                            <div class="marquee-title"><?php echo escapeOutput($product['name']); ?></div>
-                            <div class="marquee-price">&#8377;<?php echo number_format($product['price']); ?></div>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
+    <?php
+    $slug = $catData['slug'];
+    $promo = $promoConfig[$slug] ?? [
+        'title' => $catData['name'],
+        'desc' => 'Explore top quality products and best deals in ' . $catData['name'] . '.',
+        'bg' => getBaseUrl() . '/uploads/placeholder.png'
+    ];
+    ?>
+    <div class="category-section-layout">
+        <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=<?php echo escapeOutput($slug); ?>" class="category-promo-card">
+            <div class="category-promo-bg" style="background: url('<?php echo escapeOutput($promo['bg']); ?>') no-repeat center center;"></div>
+            <div class="category-promo-overlay"></div>
+            <div class="category-promo-content">
+                <h3><?php echo escapeOutput($promo['title']); ?></h3>
+                <p><?php echo escapeOutput($promo['desc']); ?></p>
+                <span class="category-promo-btn">Explore Now</span>
             </div>
-        </div>
-    <?php elseif ($catData['slug'] === 'fashion'): ?>
-        <style>
-        .fashion-section-layout {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            gap: 16px;
-            align-items: stretch;
-        }
-        .fashion-promo-card {
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            border: 1px solid #f0f0f0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            position: relative;
-            padding: 24px;
-            text-decoration: none;
-            color: #fff;
-            min-height: 240px;
-            background: #fff;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .fashion-promo-card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-        .fashion-promo-bg {
-            position: absolute;
-            inset: 0;
-            background: url('<?php echo getBaseUrl(); ?>/assets/fashion_banner.png') no-repeat center center;
-            background-size: cover;
-            z-index: 1;
-            transition: transform 0.3s ease;
-        }
-        .fashion-promo-card:hover .fashion-promo-bg {
-            transform: scale(1.04);
-        }
-        .fashion-promo-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.05) 100%);
-            z-index: 2;
-        }
-        .fashion-promo-content {
-            position: relative;
-            z-index: 3;
-            color: #fff;
-        }
-        .fashion-promo-content h3 {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 6px 0;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-        }
-        .fashion-promo-content p {
-            font-size: 13px;
-            margin: 0 0 16px 0;
-            color: #f0f4f8;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-            line-height: 1.4;
-        }
-        .fashion-promo-btn {
-            display: inline-block;
-            padding: 8px 18px;
-            background: #fb641b;
-            color: #fff;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            border-radius: 2px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background 0.2s;
-            border: none;
-        }
-        .fashion-promo-btn:hover {
-            background: #e5530b;
-        }
-        @media (max-width: 768px) {
-            .fashion-section-layout {
-                grid-template-columns: 1fr;
-            }
-            .fashion-promo-card {
-                min-height: 180px;
-            }
-        }
-        </style>
-        <div class="fashion-section-layout">
-            <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=fashion" class="fashion-promo-card">
-                <div class="fashion-promo-bg"></div>
-                <div class="fashion-promo-overlay"></div>
-                <div class="fashion-promo-content">
-                    <h3>Fashion Store</h3>
-                    <p>Upgrade your style with our latest trends and curated premium fashion collection.</p>
-                    <span class="fashion-promo-btn">Explore Now</span>
-                </div>
-            </a>
-            <div class="product-row" style="margin: 0;">
-                <?php foreach ($catData['products'] as $product): ?>
-                    <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="product-card">
-                        <div class="product-card-img" style="position:relative;">
-                            <button class="wishlist-btn-heart <?php echo $isWishlisted($product['id']) === '1' ? 'active' : ''; ?>" data-product-id="<?php echo (int)$product['id']; ?>" data-wishlisted="<?php echo $isWishlisted($product['id']); ?>" title="<?php echo $isWishlisted($product['id']) === '1' ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>" onclick="event.stopPropagation();event.preventDefault();">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                            </button>
-                            <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
-                                 alt="<?php echo escapeOutput($product['name']); ?>"
-                                 loading="lazy"
-                                 onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
-                        </div>
-                        <div class="product-card-body">
-                            <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
-                            <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
-                            <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
-                                <span class="product-card-original">&#8377;<?php echo number_format($product['original_price']); ?></span>
-                                <span class="product-card-discount"><?php echo (int)$product['discount']; ?>% off</span>
-                            <?php endif; ?>
-                            <?php if ($product['rating'] > 0): ?>
-                                <div><span class="product-card-rating"><?php echo number_format($product['rating'], 1); ?>&#9733;</span><span class="product-card-reviews">(<?php echo (int)$product['reviews']; ?>)</span></div>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    <?php else: ?>
-        <div class="product-row">
+        </a>
+        <div class="product-row" style="margin: 0;">
             <?php foreach ($catData['products'] as $product): ?>
                 <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="product-card">
                     <div class="product-card-img" style="position:relative;">
@@ -749,6 +567,9 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
+                        <?php if ($product['brand']): ?>
+                            <div class="product-card-brand"><?php echo escapeOutput($product['brand']); ?></div>
+                        <?php endif; ?>
                         <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
                         <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
                             <span class="product-card-original">&#8377;<?php echo number_format($product['original_price']); ?></span>
@@ -761,7 +582,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                 </a>
             <?php endforeach; ?>
         </div>
-    <?php endif; ?>
+    </div>
 </div>
 <?php endforeach; ?>
 
