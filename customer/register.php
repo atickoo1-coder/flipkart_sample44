@@ -1,6 +1,7 @@
 <?php
 $pageTitle = 'Customer Registration';
 require_once __DIR__ . '/../includes/customer_auth.php';
+require_once __DIR__ . '/../includes/otp_helper.php';
 
 // Redirect if already logged in
 if (isCustomerLoggedIn()) {
@@ -81,44 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $formData['postal_code']
                 ]);
 
-                $_SESSION['customer_id'] = $pdo->lastInsertId();
-                $_SESSION['customer_name'] = $formData['full_name'];
-                $_SESSION['customer_email'] = $formData['email'];
-
-                // Execute pending cart action if exists
-                if (!empty($_SESSION['pending_cart_action'])) {
-                    $pending = $_SESSION['pending_cart_action'];
-                    unset($_SESSION['pending_cart_action']);
-                    try {
-                        $stmtC = $pdo->prepare("SELECT id, quantity FROM cart WHERE customer_id = ? AND product_id = ?");
-                        $stmtC->execute([$_SESSION['customer_id'], $pending['product_id']]);
-                        $existing = $stmtC->fetch();
-
-                        $stmtP = $pdo->prepare("SELECT stock_quantity FROM products WHERE id = ?");
-                        $stmtP->execute([$pending['product_id']]);
-                        $productInfo = $stmtP->fetch();
-
-                        if ($productInfo) {
-                            $qty = min($pending['quantity'], $productInfo['stock_quantity']);
-                            if ($existing) {
-                                $newQty = min($existing['quantity'] + $qty, $productInfo['stock_quantity']);
-                                $stmtU = $pdo->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
-                                $stmtU->execute([$newQty, $existing['id']]);
-                            } else {
-                                $stmtI = $pdo->prepare("INSERT INTO cart (customer_id, product_id, quantity) VALUES (?, ?, ?)");
-                                $stmtI->execute([$_SESSION['customer_id'], $pending['product_id'], $qty]);
-                            }
-                        }
-                    } catch (Exception $e) {
-                        // Ignore
-                    }
+                $_SESSION['verify_email'] = $formData['email'];
+                if (sendOTP($formData['email'], $pdo)) {
+                    setFlashMessage('success', 'Registration successful! A verification code has been sent to your email.');
+                } else {
+                    setFlashMessage('warning', 'Registration successful, but we failed to send the verification code. Please request a new one.');
                 }
-
-                setFlashMessage('success', 'Registration successful! Welcome, ' . $formData['full_name'] . '.');
-                
-                $redirect = $_SESSION['redirect_after_login'] ?? null;
-                unset($_SESSION['redirect_after_login']);
-                header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
+                header('Location: ' . getBaseUrl() . '/customer/verify_otp.php');
                 exit();
             }
         } catch (PDOException $e) {
