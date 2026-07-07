@@ -23,14 +23,12 @@ function sendOTP($email, $pdo) {
         $stmt = $pdo->prepare("UPDATE customers SET otp_code = ?, otp_expires_at = ? WHERE email = ?");
         $stmt->execute([$otp, $expiresAt, $email]);
 
-        if ($stmt->rowCount() === 0) {
-            // Check if customer exists first
-            $stmtCheck = $pdo->prepare("SELECT id FROM customers WHERE email = ?");
-            $stmtCheck->execute([$email]);
-            if (!$stmtCheck->fetch()) {
-                return false;
-            }
+        // Store in session for verification (supports pending registrations)
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
+        $_SESSION['verify_otp'] = $otp;
+        $_SESSION['verify_otp_expires_at'] = $expiresAt;
 
         // Prepare email
         $subject = "QuickKart - Verify Your Email Account";

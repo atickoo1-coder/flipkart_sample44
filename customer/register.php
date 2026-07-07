@@ -66,27 +66,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hashedPassword = password_hash($formData['password'], PASSWORD_DEFAULT);
                 
-                $stmt = $pdo->prepare(
-                    "INSERT INTO customers (full_name, username, email, phone, password, address, city, state, postal_code) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                );
-                $stmt->execute([
-                    $formData['full_name'],
-                    $formData['username'],
-                    $formData['email'],
-                    $formData['phone'],
-                    $hashedPassword,
-                    $formData['address'],
-                    $formData['city'],
-                    $formData['state'],
-                    $formData['postal_code']
-                ]);
+                $_SESSION['pending_registration'] = [
+                    'full_name' => $formData['full_name'],
+                    'username' => $formData['username'],
+                    'email' => $formData['email'],
+                    'phone' => $formData['phone'],
+                    'password' => $hashedPassword,
+                    'address' => $formData['address'],
+                    'city' => $formData['city'],
+                    'state' => $formData['state'],
+                    'postal_code' => $formData['postal_code']
+                ];
 
                 $_SESSION['verify_email'] = $formData['email'];
                 if (sendOTP($formData['email'], $pdo)) {
-                    setFlashMessage('success', 'Registration successful! A verification code has been sent to your email.');
+                    setFlashMessage('success', 'A verification code has been sent to your email.');
                 } else {
-                    setFlashMessage('warning', 'Registration successful, but we failed to send the verification code. Please request a new one.');
+                    setFlashMessage('warning', 'Failed to send the verification code. Please request a new one.');
                 }
                 header('Location: ' . getBaseUrl() . '/customer/verify_otp.php');
                 exit();

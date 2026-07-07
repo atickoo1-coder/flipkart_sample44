@@ -53,70 +53,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $pdo = getConnection();
 
-                // Fetch customer matching the verification email
-                $stmt = $pdo->prepare(
-                    "SELECT id, full_name, email, otp_code, otp_expires_at, is_verified 
-                     FROM customers WHERE email = ?"
-                );
-                $stmt->execute([$email]);
-                $customer = $stmt->fetch();
-
-                if (!$customer) {
-                    $errors[] = 'Customer account not found.';
-                } elseif ((int)$customer['is_verified'] === 1) {
-                    // Already verified, clear verification session and redirect to login
-                    unset($_SESSION['verify_email']);
-                    setFlashMessage('success', 'Your account is already verified. Please log in.');
-                    header('Location: ' . getBaseUrl() . '/customer/login.php');
-                    exit();
-                } else {
-                    // Check OTP code and expiration
+                if (!empty($_SESSION['pending_registration'])) {
+                    // Registration Verification Flow (No user in DB yet)
                     $currentTimestamp = time();
-                    $expiresTimestamp = strtotime($customer['otp_expires_at']);
+                    $expiresTimestamp = strtotime($_SESSION['verify_otp_expires_at'] ?? '0');
 
-                    if ($customer['otp_code'] !== $otp) {
+                    if (($_SESSION['verify_otp'] ?? '') !== $otp) {
                         $errors[] = 'Invalid verification code. Please try again.';
                     } elseif ($currentTimestamp > $expiresTimestamp) {
                         $errors[] = 'Verification code has expired. Please click "Resend Code".';
                     } else {
-                        // Success! Update verification status
-                        $stmtUpdate = $pdo->prepare(
-                            "UPDATE customers 
-                             SET is_verified = 1, otp_code = NULL, otp_expires_at = NULL 
-                             WHERE id = ?"
+                        // Success! Save customer record to database with is_verified = 1
+                        $pending = $_SESSION['pending_registration'];
+                        
+                        $stmt = $pdo->prepare(
+                            "INSERT INTO customers (full_name, username, email, phone, password, address, city, state, postal_code, is_verified) 
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
                         );
-                        $stmtUpdate->execute([$customer['id']]);
+                        $stmt->execute([
+                            $pending['full_name'],
+                            $pending['username'],
+                            $pending['email'],
+                            $pending['phone'],
+                            $pending['password'],
+                            $pending['address'],
+                            $pending['city'],
+                            $pending['state'],
+                            $pending['postal_code']
+                        ]);
+                        
+                        $newCustomerId = (int)$pdo->lastInsertId();
 
-                        // Clear verification target email
+                        // Clear verification target email and pending registration details
                         unset($_SESSION['verify_email']);
+                        unset($_SESSION['pending_registration']);
+                        unset($_SESSION['verify_otp']);
+                        unset($_SESSION['verify_otp_expires_at']);
 
                         // Log user in
-                        $_SESSION['customer_id'] = (int)$customer['id'];
-                        $_SESSION['customer_name'] = $customer['full_name'];
-                        $_SESSION['customer_email'] = $customer['email'];
+                        $_SESSION['customer_id'] = $newCustomerId;
+                        $_SESSION['customer_name'] = $pending['full_name'];
+                        $_SESSION['customer_email'] = $pending['email'];
 
                         // Process pending cart action if exists
                         if (!empty($_SESSION['pending_cart_action'])) {
-                            $pending = $_SESSION['pending_cart_action'];
+                            $pendingCart = $_SESSION['pending_cart_action'];
                             unset($_SESSION['pending_cart_action']);
                             try {
                                 $stmtC = $pdo->prepare("SELECT id, quantity FROM cart WHERE customer_id = ? AND product_id = ?");
-                                $stmtC->execute([$_SESSION['customer_id'], $pending['product_id']]);
+                                $stmtC->execute([$_SESSION['customer_id'], $pendingCart['product_id']]);
                                 $existing = $stmtC->fetch();
 
                                 $stmtP = $pdo->prepare("SELECT stock_quantity FROM products WHERE id = ?");
-                                $stmtP->execute([$pending['product_id']]);
+                                $stmtP->execute([$pendingCart['product_id']]);
                                 $productInfo = $stmtP->fetch();
 
                                 if ($productInfo) {
-                                    $qty = min($pending['quantity'], $productInfo['stock_quantity']);
+                                    $qty = min($pendingCart['quantity'], $productInfo['stock_quantity']);
                                     if ($existing) {
                                         $newQty = min($existing['quantity'] + $qty, $productInfo['stock_quantity']);
                                         $stmtU = $pdo->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
                                         $stmtU->execute([$newQty, $existing['id']]);
                                     } else {
                                         $stmtI = $pdo->prepare("INSERT INTO cart (customer_id, product_id, quantity) VALUES (?, ?, ?)");
-                                        $stmtI->execute([$_SESSION['customer_id'], $pending['product_id'], $qty]);
+                                        $stmtI->execute([$_SESSION['customer_id'], $pendingCart['product_id'], $qty]);
                                     }
                                 }
                             } catch (Exception $e) {
@@ -131,6 +131,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
                         exit();
                     }
+                } else {
+                    // Login Verification Flow for legacy unverified DB accounts
+                    // Fetch customer matching the verification email
+                    $stmt = $pdo->prepare(
+                        "SELECT id, full_name, email, otp_code, otp_expires_at, is_verified 
+                         FROM customers WHERE email = ?"
+                    );
+                    $stmt->execute([$email]);
+                    $customer = $stmt->fetch();
+
+                    if (!$customer) {
+                        $errors[] = 'Customer account not found.';
+                    } elseif ((int)$customer['is_verified'] === 1) {
+                        // Already verified, clear verification session and redirect to login
+                        unset($_SESSION['verify_email']);
+                        setFlashMessage('success', 'Your account is already verified. Please log in.');
+                        header('Location: ' . getBaseUrl() . '/customer/login.php');
+                        exit();
+                    } else {
+                        // Check OTP code and expiration
+                        $currentTimestamp = time();
+                        $expiresTimestamp = strtotime($customer['otp_expires_at']);
+
+                        if ($customer['otp_code'] !== $otp) {
+                            $errors[] = 'Invalid verification code. Please try again.';
+                        } elseif ($currentTimestamp > $expiresTimestamp) {
+                            $errors[] = 'Verification code has expired. Please click "Resend Code".';
+                        } else {
+                            // Success! Update verification status
+                            $stmtUpdate = $pdo->prepare(
+                                "UPDATE customers 
+                                 SET is_verified = 1, otp_code = NULL, otp_expires_at = NULL 
+                                 WHERE id = ?"
+                            );
+                            $stmtUpdate->execute([$customer['id']]);
+
+                            // Clear verification target email and session OTP variables
+                            unset($_SESSION['verify_email']);
+                            unset($_SESSION['verify_otp']);
+                            unset($_SESSION['verify_otp_expires_at']);
+
+                            // Log user in
+                            $_SESSION['customer_id'] = (int)$customer['id'];
+                            $_SESSION['customer_name'] = $customer['full_name'];
+                            $_SESSION['customer_email'] = $customer['email'];
+
+                            // Process pending cart action if exists
+                            if (!empty($_SESSION['pending_cart_action'])) {
+                                $pendingCart = $_SESSION['pending_cart_action'];
+                                unset($_SESSION['pending_cart_action']);
+                                try {
+                                    $stmtC = $pdo->prepare("SELECT id, quantity FROM cart WHERE customer_id = ? AND product_id = ?");
+                                    $stmtC->execute([$_SESSION['customer_id'], $pendingCart['product_id']]);
+                                    $existing = $stmtC->fetch();
+
+                                    $stmtP = $pdo->prepare("SELECT stock_quantity FROM products WHERE id = ?");
+                                    $stmtP->execute([$pendingCart['product_id']]);
+                                    $productInfo = $stmtP->fetch();
+
+                                    if ($productInfo) {
+                                        $qty = min($pendingCart['quantity'], $productInfo['stock_quantity']);
+                                        if ($existing) {
+                                            $newQty = min($existing['quantity'] + $qty, $productInfo['stock_quantity']);
+                                            $stmtU = $pdo->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
+                                            $stmtU->execute([$newQty, $existing['id']]);
+                                        } else {
+                                            $stmtI = $pdo->prepare("INSERT INTO cart (customer_id, product_id, quantity) VALUES (?, ?, ?)");
+                                            $stmtI->execute([$_SESSION['customer_id'], $pendingCart['product_id'], $qty]);
+                                        }
+                                    }
+                                } catch (Exception $e) {
+                                    // Ignore
+                                }
+                            }
+
+                            setFlashMessage('success', 'Email verification successful! Welcome to QuickKart.');
+
+                            $redirect = $_SESSION['redirect_after_login'] ?? null;
+                            unset($_SESSION['redirect_after_login']);
+                            header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
+                            exit();
+                        }
+                    }
                 }
             } catch (PDOException $e) {
                 $errors[] = 'Verification failed: ' . $e->getMessage();
@@ -140,17 +223,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch active OTP code to display as a demo helper
-$demoOtp = null;
-try {
-    $pdo = getConnection();
-    $stmtDemo = $pdo->prepare("SELECT otp_code FROM customers WHERE email = ?");
-    $stmtDemo->execute([$email]);
-    $demoRow = $stmtDemo->fetch();
-    if ($demoRow && !empty($demoRow['otp_code'])) {
-        $demoOtp = $demoRow['otp_code'];
+$demoOtp = $_SESSION['verify_otp'] ?? null;
+if (empty($demoOtp)) {
+    try {
+        $pdo = getConnection();
+        $stmtDemo = $pdo->prepare("SELECT otp_code FROM customers WHERE email = ?");
+        $stmtDemo->execute([$email]);
+        $demoRow = $stmtDemo->fetch();
+        if ($demoRow && !empty($demoRow['otp_code'])) {
+            $demoOtp = $demoRow['otp_code'];
+        }
+    } catch (Exception $e) {
+        // Ignore
     }
-} catch (Exception $e) {
-    // Ignore
 }
 ?>
 <?php require_once __DIR__ . '/../includes/customer_header.php'; ?>
