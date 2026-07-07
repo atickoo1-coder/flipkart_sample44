@@ -306,6 +306,11 @@ $isWishlisted = function($id) use ($wishlistedIds) {
             <h3>Mobiles</h3>
             <p>Best Offers</p>
         </a>
+        <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=laptops" class="category-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="20" x2="22" y2="20"/><line x1="12" y1="17" x2="12" y2="20"/></svg>
+            <h3>Laptops</h3>
+            <p>Work & Play</p>
+        </a>
         <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=fashion" class="category-card">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <h3>Fashion</h3>
@@ -321,6 +326,11 @@ $isWishlisted = function($id) use ($wishlistedIds) {
             <h3>Home & Furniture</h3>
             <p>Decor Ideas</p>
         </a>
+        <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=furniture" class="category-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 18v3M20 18v3M4 10h16M4 14h16M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M12 10v4"/></svg>
+            <h3>Furniture</h3>
+            <p>Comfort Living</p>
+        </a>
         <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=beauty" class="category-card">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <h3>Beauty</h3>
@@ -330,6 +340,11 @@ $isWishlisted = function($id) use ($wishlistedIds) {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             <h3>Books</h3>
             <p>Best Reads</p>
+        </a>
+        <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=sports" class="category-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            <h3>Sports</h3>
+            <p>Stay Fit</p>
         </a>
     </div>
 </div>
