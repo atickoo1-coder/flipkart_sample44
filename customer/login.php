@@ -83,9 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     setFlashMessage('success', 'Welcome back, ' . $customer['full_name'] . '!');
 
-                    $redirect = $_SESSION['redirect_after_login'] ?? null;
                     unset($_SESSION['redirect_after_login']);
-                    header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
+                    header('Location: ' . getBaseUrl() . '/index.php');
                     exit();
                 }
             } else {
