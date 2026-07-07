@@ -138,6 +138,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+// Fetch active OTP code to display as a demo helper
+$demoOtp = null;
+try {
+    $pdo = getConnection();
+    $stmtDemo = $pdo->prepare("SELECT otp_code FROM customers WHERE email = ?");
+    $stmtDemo->execute([$email]);
+    $demoRow = $stmtDemo->fetch();
+    if ($demoRow && !empty($demoRow['otp_code'])) {
+        $demoOtp = $demoRow['otp_code'];
+    }
+} catch (Exception $e) {
+    // Ignore
+}
 ?>
 <?php require_once __DIR__ . '/../includes/customer_header.php'; ?>
 
@@ -201,6 +215,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <li><?php echo escapeOutput($error); ?></li>
                         <?php endforeach; ?>
                     </ul>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($demoOtp): ?>
+                <div class="success-alert" style="background: #e3f2fd; color: #0d47a1; border-color: #90caf9; margin-bottom: 20px; font-weight: normal;">
+                    <strong>Demo / QA Helper:</strong> Your verification code is <strong style="font-size: 16px; color: #1565c0; letter-spacing: 1px;"><?php echo escapeOutput($demoOtp); ?></strong>.
                 </div>
             <?php endif; ?>
 

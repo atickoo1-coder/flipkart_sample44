@@ -63,7 +63,7 @@ function getBaseUrl() {
         return rtrim($envBaseUrl, '/');
     }
 
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
     
     // Dynamically calculate the script's subdirectory path
