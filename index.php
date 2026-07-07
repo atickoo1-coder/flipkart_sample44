@@ -37,7 +37,7 @@ try {
     $latestProducts = $stmt->fetchAll();
 
     // Categories for grid
-    $stmt = $pdo->query("SELECT id, name, slug FROM categories WHERE status = 1 ORDER BY name LIMIT 6");
+    $stmt = $pdo->query("SELECT id, name, slug FROM categories WHERE status = 1 ORDER BY name");
     $categories = $stmt->fetchAll();
 
     $categoryProducts = [];
@@ -200,10 +200,16 @@ $isWishlisted = function($id) use ($wishlistedIds) {
             <img src="<?php echo getBaseUrl(); ?>/assets/biggest_sale_banner.png" alt="Biggest Sale of the Year" style="width: 100%; height: 100%; max-height: 240px; object-fit: contain; display: block;">
         </a>
         <div class="banner-side">
-            <div class="banner-side-item">
-                <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=mobiles">
-                    <h3>Smartphones</h3>
-                    <p>From &#8377;7,999</p>
+            <div class="banner-side-item" style="position: relative; overflow: hidden; padding: 0; background: #e3f2fd;">
+                <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=mobiles" style="display: block; width: 100%; height: 100%; text-decoration: none;">
+                    <img src="<?php echo getBaseUrl(); ?>/assets/smartphones_banner.png" alt="Smartphones Sale" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    <!-- Gradient overlay for text readability -->
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 80%); z-index: 2;"></div>
+                    <!-- Banner Title and Price Info -->
+                    <div style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); z-index: 3; color: #fff;">
+                        <h3 style="margin: 0 0 2px 0; font-size: 18px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.6);">Smartphones</h3>
+                        <p style="margin: 0; font-size: 13px; opacity: 0.95; text-shadow: 0 1px 2px rgba(0,0,0,0.6);">From &#8377;7,999</p>
+                    </div>
                 </a>
             </div>
             <div class="banner-side-item">
@@ -353,6 +359,84 @@ $isWishlisted = function($id) use ($wishlistedIds) {
     
     <?php if ($catData['slug'] === 'mobiles'): ?>
         <style>
+        .mobiles-section-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 16px;
+            align-items: stretch;
+        }
+        .mobiles-promo-card {
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            padding: 24px;
+            text-decoration: none;
+            color: #fff;
+            min-height: 240px;
+            background: #fff;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .mobiles-promo-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+        .mobiles-promo-bg {
+            position: absolute;
+            inset: 0;
+            background: url('<?php echo getBaseUrl(); ?>/assets/smartphones_banner.png') no-repeat center center;
+            background-size: cover;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        .mobiles-promo-card:hover .mobiles-promo-bg {
+            transform: scale(1.04);
+        }
+        .mobiles-promo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.05) 100%);
+            z-index: 2;
+        }
+        .mobiles-promo-content {
+            position: relative;
+            z-index: 3;
+            color: #fff;
+        }
+        .mobiles-promo-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .mobiles-promo-content p {
+            font-size: 13px;
+            margin: 0 0 16px 0;
+            color: #f0f4f8;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            line-height: 1.4;
+        }
+        .mobiles-promo-btn {
+            display: inline-block;
+            padding: 8px 18px;
+            background: #fb641b;
+            color: #fff;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background 0.2s;
+            border: none;
+        }
+        .mobiles-promo-btn:hover {
+            background: #e5530b;
+        }
         .marquee-container {
             width: 100%;
             overflow: hidden;
@@ -362,6 +446,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             position: relative;
             border: 1px solid #f0f0f0;
+            margin: 0;
         }
         .marquee-content {
             display: flex;
@@ -429,6 +514,14 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                 transform: translateX(-50%);
             }
         }
+        @media (max-width: 768px) {
+            .mobiles-section-layout {
+                grid-template-columns: 1fr;
+            }
+            .mobiles-promo-card {
+                min-height: 180px;
+            }
+        }
         </style>
         <?php
         // Fetch all active Mobiles to construct the moving banner marquee
@@ -447,19 +540,31 @@ $isWishlisted = function($id) use ($wishlistedIds) {
         // Repeat the product array to create a continuous infinite scrolling effect
         $marqueeItems = array_merge($allMobiles, $allMobiles, $allMobiles, $allMobiles);
         ?>
-        <div class="marquee-container">
-            <div class="marquee-content">
-                <?php foreach ($marqueeItems as $product): ?>
-                    <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="marquee-item">
-                        <div class="marquee-img-box">
-                            <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
-                                 alt="<?php echo escapeOutput($product['name']); ?>"
-                                 onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
-                        </div>
-                        <div class="marquee-title"><?php echo escapeOutput($product['name']); ?></div>
-                        <div class="marquee-price">&#8377;<?php echo number_format($product['price']); ?></div>
-                    </a>
-                <?php endforeach; ?>
+        <div class="mobiles-section-layout">
+            <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=mobiles" class="mobiles-promo-card">
+                <div class="mobiles-promo-bg"></div>
+                <div class="mobiles-promo-overlay"></div>
+                <div class="mobiles-promo-content">
+                    <h3>Smartphones</h3>
+                    <p>Upgrade to the latest smartphones with top-tier cameras, high-performance chipsets, and spectacular deals.</p>
+                    <span class="mobiles-promo-btn">Shop Now</span>
+                </div>
+            </a>
+            
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <?php foreach ($marqueeItems as $product): ?>
+                        <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="marquee-item">
+                            <div class="marquee-img-box">
+                                <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
+                                     alt="<?php echo escapeOutput($product['name']); ?>"
+                                     onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
+                            </div>
+                            <div class="marquee-title"><?php echo escapeOutput($product['name']); ?></div>
+                            <div class="marquee-price">&#8377;<?php echo number_format($product['price']); ?></div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
     <?php else: ?>
