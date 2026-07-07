@@ -83,12 +83,12 @@
                     btn.classList.add('active');
                     btn.setAttribute('data-wishlist', '1');
                     btn.title = 'Remove from Wishlist';
-                    showToast('Product added to Wishlist.', 'success');
+                    showToast('added to wishlist', 'success');
                 } else {
                     btn.classList.remove('active');
                     btn.setAttribute('data-wishlist', '0');
                     btn.title = 'Add to Wishlist';
-                    showToast('Product removed from Wishlist.', 'info');
+                    showToast('removed from wishlist', 'success');
                 }
                 updateWishlistBadge(data.count);
                 var event = new CustomEvent('wishlistUpdate', { detail: { count: data.count } });
