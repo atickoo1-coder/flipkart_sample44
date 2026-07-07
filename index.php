@@ -45,7 +45,7 @@ try {
         $catIds = array_column($categories, 'id');
         $placeholders = implode(',', array_fill(0, count($catIds), '?'));
         
-        $sql = "SELECT id, name, slug, price, original_price, discount, image, rating, reviews, category_id
+        $sql = "SELECT id, name, slug, price, original_price, discount, image, rating, reviews, category_id, brand
                 FROM (
                     SELECT p.*, ROW_NUMBER() OVER (PARTITION BY p.category_id ORDER BY p.id DESC) as rn
                     FROM products p
@@ -567,7 +567,7 @@ $promoConfig = [
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
-                        <?php if ($product['brand']): ?>
+                        <?php if (!empty($product['brand'])): ?>
                             <div class="product-card-brand"><?php echo escapeOutput($product['brand']); ?></div>
                         <?php endif; ?>
                         <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
