@@ -58,8 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo = getConnection();
 
+            $emailHash = hash('sha256', $formData['email']);
             $stmt = $pdo->prepare("SELECT id FROM customers WHERE username = ? OR email = ?");
-            $stmt->execute([$formData['username'], $formData['email']]);
+            $stmt->execute([$formData['username'], $emailHash]);
             
             if ($stmt->fetch()) {
                 $errors[] = 'Username or email already exists';
@@ -69,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['pending_registration'] = [
                     'full_name' => $formData['full_name'],
                     'username' => $formData['username'],
-                    'email' => $formData['email'],
+                    'email' => $emailHash,
                     'phone' => $formData['phone'],
                     'password' => $hashedPassword,
                     'address' => $formData['address'],

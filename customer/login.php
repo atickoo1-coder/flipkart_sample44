@@ -21,62 +21,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo = getConnection();
 
+            $loginSearch = $loginInput;
+            $isEmailInput = false;
+            if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
+                $loginSearch = hash('sha256', $loginInput);
+                $isEmailInput = true;
+            }
+
             $stmt = $pdo->prepare(
                 "SELECT id, full_name, username, email, phone, password, address, city, state, postal_code, is_verified 
                  FROM customers WHERE email = ? OR username = ?"
             );
-            $stmt->execute([$loginInput, $loginInput]);
+            $stmt->execute([$loginSearch, $loginInput]);
             $customer = $stmt->fetch();
 
             if ($customer && password_verify($password, $customer['password'])) {
                 if ((int)$customer['is_verified'] === 0) {
-                    require_once __DIR__ . '/../includes/otp_helper.php';
-                    $_SESSION['verify_email'] = $customer['email'];
-                    sendOTP($customer['email'], $pdo);
-                    setFlashMessage('warning', 'Please verify your email address. A new OTP has been sent to your email.');
-                    header('Location: ' . getBaseUrl() . '/customer/verify_otp.php');
+                    if (!$isEmailInput) {
+                        $errors[] = 'Please log in using your registered email address to verify your account.';
+                    } else {
+                        require_once __DIR__ . '/../includes/otp_helper.php';
+                        $_SESSION['verify_email'] = $loginInput;
+                        sendOTP($loginInput, $pdo);
+                        setFlashMessage('warning', 'Please verify your email address. A new OTP has been sent to your email.');
+                        header('Location: ' . getBaseUrl() . '/customer/verify_otp.php');
+                        exit();
+                    }
+                } else {
+                    $_SESSION['customer_id'] = (int)$customer['id'];
+                    $_SESSION['customer_name'] = $customer['full_name'];
+                    $_SESSION['customer_email'] = $customer['email'];
+
+                    // Execute pending cart action if exists
+                    if (!empty($_SESSION['pending_cart_action'])) {
+                        $pending = $_SESSION['pending_cart_action'];
+                        unset($_SESSION['pending_cart_action']);
+                        try {
+                            $stmtC = $pdo->prepare("SELECT id, quantity FROM cart WHERE customer_id = ? AND product_id = ?");
+                            $stmtC->execute([$_SESSION['customer_id'], $pending['product_id']]);
+                            $existing = $stmtC->fetch();
+
+                            $stmtP = $pdo->prepare("SELECT stock_quantity FROM products WHERE id = ?");
+                            $stmtP->execute([$pending['product_id']]);
+                            $productInfo = $stmtP->fetch();
+
+                            if ($productInfo) {
+                                $qty = min($pending['quantity'], $productInfo['stock_quantity']);
+                                if ($existing) {
+                                    $newQty = min($existing['quantity'] + $qty, $productInfo['stock_quantity']);
+                                    $stmtU = $pdo->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
+                                    $stmtU->execute([$newQty, $existing['id']]);
+                                } else {
+                                    $stmtI = $pdo->prepare("INSERT INTO cart (customer_id, product_id, quantity) VALUES (?, ?, ?)");
+                                    $stmtI->execute([$_SESSION['customer_id'], $pending['product_id'], $qty]);
+                                }
+                            }
+                        } catch (Exception $e) {
+                            // Ignore
+                        }
+                    }
+
+                    setFlashMessage('success', 'Welcome back, ' . $customer['full_name'] . '!');
+
+                    $redirect = $_SESSION['redirect_after_login'] ?? null;
+                    unset($_SESSION['redirect_after_login']);
+                    header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
                     exit();
                 }
-
-                $_SESSION['customer_id'] = (int)$customer['id'];
-                $_SESSION['customer_name'] = $customer['full_name'];
-                $_SESSION['customer_email'] = $customer['email'];
-
-                // Execute pending cart action if exists
-                if (!empty($_SESSION['pending_cart_action'])) {
-                    $pending = $_SESSION['pending_cart_action'];
-                    unset($_SESSION['pending_cart_action']);
-                    try {
-                        $stmtC = $pdo->prepare("SELECT id, quantity FROM cart WHERE customer_id = ? AND product_id = ?");
-                        $stmtC->execute([$_SESSION['customer_id'], $pending['product_id']]);
-                        $existing = $stmtC->fetch();
-
-                        $stmtP = $pdo->prepare("SELECT stock_quantity FROM products WHERE id = ?");
-                        $stmtP->execute([$pending['product_id']]);
-                        $productInfo = $stmtP->fetch();
-
-                        if ($productInfo) {
-                            $qty = min($pending['quantity'], $productInfo['stock_quantity']);
-                            if ($existing) {
-                                $newQty = min($existing['quantity'] + $qty, $productInfo['stock_quantity']);
-                                $stmtU = $pdo->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
-                                $stmtU->execute([$newQty, $existing['id']]);
-                            } else {
-                                $stmtI = $pdo->prepare("INSERT INTO cart (customer_id, product_id, quantity) VALUES (?, ?, ?)");
-                                $stmtI->execute([$_SESSION['customer_id'], $pending['product_id'], $qty]);
-                            }
-                        }
-                    } catch (Exception $e) {
-                        // Ignore
-                    }
-                }
-
-                setFlashMessage('success', 'Welcome back, ' . $customer['full_name'] . '!');
-
-                $redirect = $_SESSION['redirect_after_login'] ?? null;
-                unset($_SESSION['redirect_after_login']);
-                header('Location: ' . ($redirect ?: getBaseUrl() . '/index.php'));
-                exit();
             } else {
                 $errors[] = 'Invalid email/username or password';
             }

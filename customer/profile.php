@@ -154,7 +154,15 @@ $cartCount = $stmt->fetch()['cart_count'];
 
         <div class="profile-card">
             <h3>Account Information</h3>
-            <p><strong>Email:</strong> <?php echo escapeOutput($customer['email']); ?></p>
+            <p><strong>Email:</strong> 
+                <?php 
+                if (strlen($customer['email']) === 64 && preg_match('/^[a-f0-9]{64}$/i', $customer['email'])) {
+                    echo '[Hidden for Privacy]';
+                } else {
+                    echo escapeOutput($customer['email']);
+                }
+                ?>
+            </p>
             <p><strong>Username:</strong> <?php echo escapeOutput($customer['username']); ?></p>
             <p><strong>Member since:</strong> <?php echo date('d M Y', strtotime($customer['created_at'])); ?></p>
         </div>
