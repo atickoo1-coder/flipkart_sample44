@@ -19,6 +19,43 @@ $baseUrl = getBaseUrl();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>/css/style.css">
     <meta name="csrf-token" content="<?php echo generateCSRFToken(); ?>">
+    <script>
+        (function() {
+            window.shopBaseUrl = "<?php echo $baseUrl; ?>";
+            try {
+                var isReload = false;
+                if (window.performance) {
+                    var navs = performance.getEntriesByType('navigation');
+                    if (navs && navs.length > 0) {
+                        isReload = (navs[0].type === 'reload');
+                    } else if (performance.navigation) {
+                        isReload = (performance.navigation.type === 1);
+                    }
+                }
+                if (isReload) {
+                    var currentPath = window.location.pathname.toLowerCase();
+                    var homepagePath = (new URL(window.shopBaseUrl)).pathname.toLowerCase();
+                    if (homepagePath.slice(-1) !== '/') {
+                        homepagePath += '/';
+                    }
+                    var normalizedPath = currentPath;
+                    if (normalizedPath.slice(-1) !== '/') {
+                        normalizedPath += '/';
+                    }
+                    
+                    var isHome = (normalizedPath === homepagePath) || 
+                                 currentPath.endsWith('/index.php') || 
+                                 currentPath.endsWith('/index.html');
+                                 
+                    if (!isHome) {
+                        window.location.href = window.shopBaseUrl + '/index.php';
+                    }
+                }
+            } catch (e) {
+                console.error('Reload redirect error:', e);
+            }
+        })();
+    </script>
 </head>
 <body>
 
