@@ -212,10 +212,16 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                     </div>
                 </a>
             </div>
-            <div class="banner-side-item">
-                <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=fashion">
-                    <h3>Fashion Store</h3>
-                    <p>Min 50% off</p>
+            <div class="banner-side-item" style="position: relative; overflow: hidden; padding: 0; background: #fff3e0;">
+                <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=fashion" style="display: block; width: 100%; height: 100%; text-decoration: none;">
+                    <img src="<?php echo getBaseUrl(); ?>/assets/fashion_banner.png" alt="Fashion Store" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    <!-- Gradient overlay for text readability -->
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 80%); z-index: 2;"></div>
+                    <!-- Banner Title and Price Info -->
+                    <div style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); z-index: 3; color: #fff;">
+                        <h3 style="margin: 0 0 2px 0; font-size: 18px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.6);">Fashion Store</h3>
+                        <p style="margin: 0; font-size: 13px; opacity: 0.95; text-shadow: 0 1px 2px rgba(0,0,0,0.6);">Min 50% off</p>
+                    </div>
                 </a>
             </div>
         </div>
@@ -565,6 +571,131 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                         </a>
                     <?php endforeach; ?>
                 </div>
+            </div>
+        </div>
+    <?php elseif ($catData['slug'] === 'fashion'): ?>
+        <style>
+        .fashion-section-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 16px;
+            align-items: stretch;
+        }
+        .fashion-promo-card {
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            padding: 24px;
+            text-decoration: none;
+            color: #fff;
+            min-height: 240px;
+            background: #fff;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .fashion-promo-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+        .fashion-promo-bg {
+            position: absolute;
+            inset: 0;
+            background: url('<?php echo getBaseUrl(); ?>/assets/fashion_banner.png') no-repeat center center;
+            background-size: cover;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        .fashion-promo-card:hover .fashion-promo-bg {
+            transform: scale(1.04);
+        }
+        .fashion-promo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.05) 100%);
+            z-index: 2;
+        }
+        .fashion-promo-content {
+            position: relative;
+            z-index: 3;
+            color: #fff;
+        }
+        .fashion-promo-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .fashion-promo-content p {
+            font-size: 13px;
+            margin: 0 0 16px 0;
+            color: #f0f4f8;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            line-height: 1.4;
+        }
+        .fashion-promo-btn {
+            display: inline-block;
+            padding: 8px 18px;
+            background: #fb641b;
+            color: #fff;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background 0.2s;
+            border: none;
+        }
+        .fashion-promo-btn:hover {
+            background: #e5530b;
+        }
+        @media (max-width: 768px) {
+            .fashion-section-layout {
+                grid-template-columns: 1fr;
+            }
+            .fashion-promo-card {
+                min-height: 180px;
+            }
+        }
+        </style>
+        <div class="fashion-section-layout">
+            <a href="<?php echo getBaseUrl(); ?>/products/products.php?category=fashion" class="fashion-promo-card">
+                <div class="fashion-promo-bg"></div>
+                <div class="fashion-promo-overlay"></div>
+                <div class="fashion-promo-content">
+                    <h3>Fashion Store</h3>
+                    <p>Upgrade your style with our latest trends and curated premium fashion collection.</p>
+                    <span class="fashion-promo-btn">Explore Now</span>
+                </div>
+            </a>
+            <div class="product-row" style="margin: 0;">
+                <?php foreach ($catData['products'] as $product): ?>
+                    <a href="<?php echo getBaseUrl(); ?>/products/product.php?slug=<?php echo escapeOutput($product['slug']); ?>" class="product-card">
+                        <div class="product-card-img" style="position:relative;">
+                            <button class="wishlist-btn-heart <?php echo $isWishlisted($product['id']) === '1' ? 'active' : ''; ?>" data-product-id="<?php echo (int)$product['id']; ?>" data-wishlisted="<?php echo $isWishlisted($product['id']); ?>" title="<?php echo $isWishlisted($product['id']) === '1' ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>" onclick="event.stopPropagation();event.preventDefault();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </button>
+                            <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
+                                 alt="<?php echo escapeOutput($product['name']); ?>"
+                                 onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
+                        </div>
+                        <div class="product-card-body">
+                            <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
+                            <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
+                            <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
+                                <span class="product-card-original">&#8377;<?php echo number_format($product['original_price']); ?></span>
+                                <span class="product-card-discount"><?php echo (int)$product['discount']; ?>% off</span>
+                            <?php endif; ?>
+                            <?php if ($product['rating'] > 0): ?>
+                                <div><span class="product-card-rating"><?php echo number_format($product['rating'], 1); ?>&#9733;</span><span class="product-card-reviews">(<?php echo (int)$product['reviews']; ?>)</span></div>
+                            <?php endif; ?>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
             </div>
         </div>
     <?php else: ?>
