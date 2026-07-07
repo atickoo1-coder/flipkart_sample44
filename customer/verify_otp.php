@@ -41,15 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
         $errors[] = 'Invalid request. Please refresh the page and try again.';
     } else {
-        $autoVerify = isset($_POST['auto_verify']);
         $otp = sanitizeInput($_POST['otp'] ?? '');
 
-        if (!$autoVerify) {
-            if (empty($otp)) {
-                $errors[] = 'Please enter the verification code.';
-            } elseif (!preg_match('/^\d{6}$/', $otp)) {
-                $errors[] = 'Verification code must be a 6-digit number.';
-            }
+        if (empty($otp)) {
+            $errors[] = 'Please enter the verification code.';
+        } elseif (!preg_match('/^\d{6}$/', $otp)) {
+            $errors[] = 'Verification code must be a 6-digit number.';
         }
 
         if (empty($errors)) {
@@ -61,9 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $currentTimestamp = time();
                     $expiresTimestamp = strtotime($_SESSION['verify_otp_expires_at'] ?? '0');
 
-                    if (!$autoVerify && ($_SESSION['verify_otp'] ?? '') !== $otp) {
+                    if (($_SESSION['verify_otp'] ?? '') !== $otp) {
                         $errors[] = 'Invalid verification code. Please try again.';
-                    } elseif (!$autoVerify && $currentTimestamp > $expiresTimestamp) {
+                    } elseif ($currentTimestamp > $expiresTimestamp) {
                         $errors[] = 'Verification code has expired. Please click "Resend Code".';
                     } else {
                         // Success! Save customer record to database with is_verified = 1
@@ -157,9 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $currentTimestamp = time();
                         $expiresTimestamp = strtotime($customer['otp_expires_at']);
 
-                        if (!$autoVerify && $customer['otp_code'] !== $otp) {
+                        if ($customer['otp_code'] !== $otp) {
                             $errors[] = 'Invalid verification code. Please try again.';
-                        } elseif (!$autoVerify && $currentTimestamp > $expiresTimestamp) {
+                        } elseif ($currentTimestamp > $expiresTimestamp) {
                             $errors[] = 'Verification code has expired. Please click "Resend Code".';
                         } else {
                             // Success! Update verification status
@@ -225,24 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch active OTP code to display as a demo helper (only if email was NOT sent successfully!)
-$demoOtp = null;
-if (empty($_SESSION['email_sent_successfully'])) {
-    $demoOtp = $_SESSION['verify_otp'] ?? null;
-    if (empty($demoOtp)) {
-        try {
-            $pdo = getConnection();
-            $stmtDemo = $pdo->prepare("SELECT otp_code FROM customers WHERE email = ?");
-            $stmtDemo->execute([$email]);
-            $demoRow = $stmtDemo->fetch();
-            if ($demoRow && !empty($demoRow['otp_code'])) {
-                $demoOtp = $demoRow['otp_code'];
-            }
-        } catch (Exception $e) {
-            // Ignore
-        }
-    }
-}
+
 ?>
 <?php require_once __DIR__ . '/../includes/customer_header.php'; ?>
 
@@ -309,18 +289,7 @@ if (empty($_SESSION['email_sent_successfully'])) {
                 </div>
             <?php endif; ?>
 
-            <?php if ($demoOtp): ?>
-                <div class="success-alert" style="background: #e3f2fd; color: #0d47a1; border-color: #90caf9; margin-bottom: 20px; font-weight: normal; text-align: center;">
-                    <div style="margin-bottom: 10px;">
-                        <strong>Demo / QA Helper:</strong> Your verification code is <strong style="font-size: 16px; color: #1565c0; letter-spacing: 1px;"><?php echo escapeOutput($demoOtp); ?></strong>.
-                    </div>
-                    <form method="POST" action="" style="display: inline-block; margin: 0;">
-                        <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
-                        <input type="hidden" name="auto_verify" value="1">
-                        <button type="submit" class="btn-primary" style="background: #2e7d32; padding: 6px 14px; font-size: 12px; height: auto; text-transform: none; border-radius: 4px; border: none; cursor: pointer; line-height: 1.5; width: auto; font-family: inherit; font-weight: 500;">Auto-Verify & Login</button>
-                    </form>
-                </div>
-            <?php endif; ?>
+
 
             <div class="info-text">
                 Enter the 6-digit code sent to:<br>

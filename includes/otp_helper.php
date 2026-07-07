@@ -114,7 +114,7 @@ function sendOTP($email, $pdo) {
         // Store status in session
         $_SESSION['email_sent_successfully'] = $emailSent;
 
-        return true;
+        return $emailSent;
     } catch (Exception $e) {
         error_log("OTP Send Error: " . $e->getMessage());
         return false;
