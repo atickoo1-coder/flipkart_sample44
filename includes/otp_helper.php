@@ -76,7 +76,8 @@ function sendOTP($email, $pdo) {
                 );
 
                 // Recipients
-                $mail->setFrom($smtpUser, 'QuickKart');
+                $smtpFrom = getenv('SMTP_FROM') ?: $smtpUser;
+                $mail->setFrom($smtpFrom, 'QuickKart');
                 $mail->addAddress($email);
 
                 // Content
