@@ -169,5 +169,3 @@ function hasCustomerBoughtAnything() {
         return false;
     }
 }
-?>
-
