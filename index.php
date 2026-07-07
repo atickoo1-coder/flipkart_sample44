@@ -41,20 +41,37 @@ try {
     $categories = $stmt->fetchAll();
 
     $categoryProducts = [];
-    foreach ($categories as $cat) {
-        $stmt = $pdo->prepare(
-            "SELECT id, name, slug, price, original_price, discount, image, rating, reviews 
-             FROM products WHERE category_id = ? AND status = 1 
-             ORDER BY RAND() LIMIT 4"
-        );
-        $stmt->execute([$cat['id']]);
-        $catProducts = $stmt->fetchAll();
-        if (!empty($catProducts)) {
-            $categoryProducts[$cat['id']] = [
-                'name' => $cat['name'],
-                'slug' => $cat['slug'],
-                'products' => $catProducts
-            ];
+    if (!empty($categories)) {
+        $catIds = array_column($categories, 'id');
+        $placeholders = implode(',', array_fill(0, count($catIds), '?'));
+        
+        $sql = "SELECT id, name, slug, price, original_price, discount, image, rating, reviews, category_id
+                FROM (
+                    SELECT p.*, ROW_NUMBER() OVER (PARTITION BY p.category_id ORDER BY p.id DESC) as rn
+                    FROM products p
+                    WHERE p.category_id IN ($placeholders) AND p.status = 1
+                ) t
+                WHERE rn <= 4";
+                
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($catIds);
+        $allCatProducts = $stmt->fetchAll();
+
+        // Group by category_id
+        $productsByCat = [];
+        foreach ($allCatProducts as $p) {
+            $productsByCat[$p['category_id']][] = $p;
+        }
+
+        foreach ($categories as $cat) {
+            $catId = $cat['id'];
+            if (!empty($productsByCat[$catId])) {
+                $categoryProducts[$catId] = [
+                    'name' => $cat['name'],
+                    'slug' => $cat['slug'],
+                    'products' => $productsByCat[$catId]
+                ];
+            }
         }
     }
 
@@ -253,6 +270,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                         </button>
                         <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
                              alt="<?php echo escapeOutput($product['name']); ?>"
+                             loading="lazy"
                              onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
                     </div>
                     <div class="product-card-body">
@@ -333,6 +351,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                     </button>
                     <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
                          alt="<?php echo escapeOutput($product['name']); ?>"
+                         loading="lazy"
                          onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
                 </div>
                 <div class="product-card-body">
@@ -564,6 +583,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                             <div class="marquee-img-box">
                                 <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
                                      alt="<?php echo escapeOutput($product['name']); ?>"
+                                     loading="lazy"
                                      onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
                             </div>
                             <div class="marquee-title"><?php echo escapeOutput($product['name']); ?></div>
@@ -681,6 +701,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                             </button>
                             <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
                                  alt="<?php echo escapeOutput($product['name']); ?>"
+                                 loading="lazy"
                                  onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
                         </div>
                         <div class="product-card-body">
@@ -708,6 +729,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                         </button>
                         <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
                              alt="<?php echo escapeOutput($product['name']); ?>"
+                             loading="lazy"
                              onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
                     </div>
                     <div class="product-card-body">
@@ -744,6 +766,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                     </button>
                     <img src="<?php echo getBaseUrl(); ?>/uploads/<?php echo escapeOutput($product['image'] ?? 'placeholder.png'); ?>" 
                          alt="<?php echo escapeOutput($product['name']); ?>"
+                         loading="lazy"
                          onerror="this.src='<?php echo getBaseUrl(); ?>/uploads/placeholder.png'">
                 </div>
                 <div class="product-card-body">
