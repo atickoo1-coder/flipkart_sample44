@@ -245,7 +245,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
     </div>
 </div>
 
-<?php if (isCustomerLoggedIn()): ?>
+<?php if (isCustomerLoggedIn() && hasCustomerBoughtAnything()): ?>
 <!-- For You Section -->
 <div class="section" id="for-you" style="scroll-margin-top: 16px;">
     <div class="section-header">

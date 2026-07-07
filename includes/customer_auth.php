@@ -149,4 +149,25 @@ function sanitizeInput($data) {
     $data = stripslashes($data);
     return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
+
+/**
+ * Check if the logged-in customer has bought anything
+ * 
+ * @return bool True if the customer has placed at least one non-cancelled order, false otherwise.
+ */
+function hasCustomerBoughtAnything() {
+    if (!isCustomerLoggedIn()) {
+        return false;
+    }
+    try {
+        $pdo = getConnection();
+        $stmt = $pdo->prepare("SELECT COUNT(*) as cnt FROM orders WHERE customer_id = ? AND order_status != 'cancelled'");
+        $stmt->execute([$_SESSION['customer_id']]);
+        $row = $stmt->fetch();
+        return ($row && $row['cnt'] > 0);
+    } catch (Throwable $e) {
+        return false;
+    }
+}
 ?>
+
