@@ -222,19 +222,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch active OTP code to display as a demo helper
-$demoOtp = $_SESSION['verify_otp'] ?? null;
-if (empty($demoOtp)) {
-    try {
-        $pdo = getConnection();
-        $stmtDemo = $pdo->prepare("SELECT otp_code FROM customers WHERE email = ?");
-        $stmtDemo->execute([$email]);
-        $demoRow = $stmtDemo->fetch();
-        if ($demoRow && !empty($demoRow['otp_code'])) {
-            $demoOtp = $demoRow['otp_code'];
+// Fetch active OTP code to display as a demo helper (only if email was NOT sent successfully!)
+$demoOtp = null;
+if (empty($_SESSION['email_sent_successfully'])) {
+    $demoOtp = $_SESSION['verify_otp'] ?? null;
+    if (empty($demoOtp)) {
+        try {
+            $pdo = getConnection();
+            $stmtDemo = $pdo->prepare("SELECT otp_code FROM customers WHERE email = ?");
+            $stmtDemo->execute([$email]);
+            $demoRow = $stmtDemo->fetch();
+            if ($demoRow && !empty($demoRow['otp_code'])) {
+                $demoOtp = $demoRow['otp_code'];
+            }
+        } catch (Exception $e) {
+            // Ignore
         }
-    } catch (Exception $e) {
-        // Ignore
     }
 }
 ?>
