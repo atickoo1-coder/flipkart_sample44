@@ -1,6 +1,6 @@
 <?php
 /**
- * Temporary delete script to run on Render database.
+ * Temporary diagnostic and delete script to run on Render database.
  * Will be deleted immediately after execution.
  */
 require_once __DIR__ . '/../includes/customer_auth.php';
@@ -14,24 +14,25 @@ try {
     $pdo = getConnection();
     echo "Connection successful!\n\n";
     
-    // Find matching customer(s) to report first
-    $stmt = $pdo->prepare("SELECT id, username, email, full_name FROM customers WHERE email = ? OR email = ?");
-    $stmt->execute([$targetEmail, $targetHash]);
-    $customers = $stmt->fetchAll();
+    // List all customers currently in DB
+    $stmtAll = $pdo->prepare("SELECT id, username, email, full_name, created_at FROM customers");
+    $stmtAll->execute();
+    $all = $stmtAll->fetchAll();
 
-    if (empty($customers)) {
-        echo "No customer found with email '$targetEmail' or its hash '$targetHash'.\n";
+    echo "Total customers in database: " . count($all) . "\n";
+    foreach ($all as $c) {
+        echo "ID: {$c['id']} | Username: {$c['username']} | Email: {$c['email']} | Name: {$c['full_name']} | Created: {$c['created_at']}\n";
+    }
+
+    // Try deleting target email variations if matched
+    // Lowercase hash
+    $stmtDelete = $pdo->prepare("DELETE FROM customers WHERE email = ? OR email = ? OR LOWER(username) = 'anshultickoo22'");
+    $stmtDelete->execute([$targetEmail, $targetHash]);
+    $rowsDeleted = $stmtDelete->rowCount();
+    if ($rowsDeleted > 0) {
+        echo "\nSuccessfully deleted $rowsDeleted customer record(s) matching '$targetEmail' or username 'anshultickoo22'.\n";
     } else {
-        echo "Found the following matching customer(s):\n";
-        foreach ($customers as $c) {
-            echo "ID: {$c['id']} | Username: {$c['username']} | Email: {$c['email']} | Name: {$c['full_name']}\n";
-        }
-
-        // Delete the matching rows
-        $stmtDelete = $pdo->prepare("DELETE FROM customers WHERE email = ? OR email = ?");
-        $stmtDelete->execute([$targetEmail, $targetHash]);
-        $rowsDeleted = $stmtDelete->rowCount();
-        echo "\nSuccessfully deleted $rowsDeleted customer record(s) from the Render database.\n";
+        echo "\nNo direct match deleted for '$targetEmail'.\n";
     }
 } catch (Exception $e) {
     echo "ERROR: " . $e->getMessage() . "\n";
