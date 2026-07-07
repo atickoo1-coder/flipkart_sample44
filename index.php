@@ -365,7 +365,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
-                        <?php if ($product['brand']): ?>
+                        <?php if (!empty($product['brand'])): ?>
                             <div class="product-card-brand"><?php echo escapeOutput($product['brand']); ?></div>
                         <?php endif; ?>
                         <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
@@ -461,7 +461,7 @@ $isWishlisted = function($id) use ($wishlistedIds) {
                 </div>
                 <div class="product-card-body">
                     <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
-                    <?php if ($product['brand']): ?>
+                    <?php if (!empty($product['brand'])): ?>
                         <div class="product-card-brand"><?php echo escapeOutput($product['brand']); ?></div>
                     <?php endif; ?>
                     <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
@@ -607,7 +607,7 @@ $promoConfig = [
                 </div>
                 <div class="product-card-body">
                     <div class="product-card-title"><?php echo escapeOutput($product['name']); ?></div>
-                    <?php if ($product['brand']): ?>
+                    <?php if (!empty($product['brand'])): ?>
                         <div class="product-card-brand"><?php echo escapeOutput($product['brand']); ?></div>
                     <?php endif; ?>
                     <span class="product-card-price">&#8377;<?php echo number_format($product['price']); ?></span>
