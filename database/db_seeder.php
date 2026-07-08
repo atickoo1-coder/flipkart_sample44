@@ -45,7 +45,7 @@ try {
         'redmi_note_13.jpg' => 'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&auto=format&fit=crop&q=80',
         'realme_12.jpg' => 'https://images.unsplash.com/photo-1598327106026-d9521da673d1?w=600&auto=format&fit=crop&q=80',
         'moto_edge_50.jpg' => 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=600&auto=format&fit=crop&q=80',
-        'nothing_2a.jpg' => 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=600&auto=format&fit=crop&q=80',
+        'nothing_2a.jpg' => 'https://images.unsplash.com/photo-1661268277249-38f133ba09c9?w=600&auto=format&fit=crop&q=80',
         'vivo_v30.jpg' => 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&auto=format&fit=crop&q=80',
         'poco_x6.jpg' => 'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=600&auto=format&fit=crop&q=80',
 
