@@ -44,9 +44,9 @@ try {
         'pixel_8.jpg' => 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80',
         'redmi_note_13.jpg' => 'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&auto=format&fit=crop&q=80',
         'realme_12.jpg' => 'https://images.unsplash.com/photo-1598327106026-d9521da673d1?w=600&auto=format&fit=crop&q=80',
-        'moto_edge_50.jpg' => 'https://images.unsplash.com/photo-1565849906660-4dfc4a1795c6?w=600&auto=format&fit=crop&q=80',
+        'moto_edge_50.jpg' => 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=600&auto=format&fit=crop&q=80',
         'nothing_2a.jpg' => 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=600&auto=format&fit=crop&q=80',
-        'vivo_v30.jpg' => 'https://images.unsplash.com/photo-1574755393849-62394222f30b?w=600&auto=format&fit=crop&q=80',
+        'vivo_v30.jpg' => 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&auto=format&fit=crop&q=80',
         'poco_x6.jpg' => 'https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=600&auto=format&fit=crop&q=80',
 
         // 2. Laptops
@@ -77,12 +77,12 @@ try {
         'noise_headphones.jpg' => 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80',
         'bt_speaker.jpg' => 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&auto=format&fit=crop&q=80',
         'fitness_band.jpg' => 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=600&auto=format&fit=crop&q=80',
-        'action_camera.jpg' => 'https://images.unsplash.com/photo-1526447568113-d14a4b41ad77?w=600&auto=format&fit=crop&q=80',
-        'charging_pad.jpg' => 'https://images.unsplash.com/photo-1622445262465-2481c4574875?w=600&auto=format&fit=crop&q=80',
-        'security_camera.jpg' => 'https://images.unsplash.com/photo-1558089687-f282ffcbd1d5?w=600&auto=format&fit=crop&q=80',
-        'power_bank.jpg' => 'https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?w=600&auto=format&fit=crop&q=80',
+        'action_camera.jpg' => 'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=600&auto=format&fit=crop&q=80',
+        'charging_pad.jpg' => 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80',
+        'security_camera.jpg' => 'https://images.unsplash.com/photo-1528319725582-ddc096101511?w=600&auto=format&fit=crop&q=80',
+        'power_bank.jpg' => 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=600&auto=format&fit=crop&q=80',
         'wireless_mouse.jpg' => 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=600&auto=format&fit=crop&q=80',
-        'usbc_hub.jpg' => 'https://images.unsplash.com/photo-1468495244122-44a1ae945371?w=600&auto=format&fit=crop&q=80',
+        'usbc_hub.jpg' => 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=600&auto=format&fit=crop&q=80',
         'ring_light.jpg' => 'https://images.unsplash.com/photo-1590608897129-79da98d15969?w=600&auto=format&fit=crop&q=80',
 
         // 5. Home Decor
@@ -92,17 +92,17 @@ try {
         'desk_lamp.jpg' => 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&auto=format&fit=crop&q=80',
         'bath_mat.jpg' => 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&auto=format&fit=crop&q=80',
         'scented_candles.jpg' => 'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&auto=format&fit=crop&q=80',
-        'wall_clock.jpg' => 'https://images.unsplash.com/photo-1563861826100-9cb868fdcd1d?w=600&auto=format&fit=crop&q=80',
+        'wall_clock.jpg' => 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&auto=format&fit=crop&q=80',
         'steel_bottle.jpg' => 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&auto=format&fit=crop&q=80',
         'kitchen_knives.jpg' => 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=600&auto=format&fit=crop&q=80',
         'storage_drawer.jpg' => 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&auto=format&fit=crop&q=80',
 
         // 6. Beauty
-        'face_moisturizer.jpg' => 'https://images.unsplash.com/photo-1608248597481-496100c8c836?w=600&auto=format&fit=crop&q=80',
+        'face_moisturizer.jpg' => 'https://images.unsplash.com/photo-1617897903246-719242758050?w=600&auto=format&fit=crop&q=80',
         'matte_lipstick.jpg' => 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=600&auto=format&fit=crop&q=80',
         'charcoal_mask.jpg' => 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&auto=format&fit=crop&q=80',
         'vitamin_c_serum.jpg' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80',
-        'argan_hair_oil.jpg' => 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=600&auto=format&fit=crop&q=80',
+        'argan_hair_oil.jpg' => 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&auto=format&fit=crop&q=80',
         'mens_perfume.jpg' => 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&auto=format&fit=crop&q=80',
         'sunscreen_gel.jpg' => 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=600&auto=format&fit=crop&q=80',
         'cleansing_facewash.jpg' => 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&auto=format&fit=crop&q=80',
@@ -110,23 +110,23 @@ try {
         'aloe_vera_gel.jpg' => 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&auto=format&fit=crop&q=80',
 
         // 7. Books
-        'atomic_habits.jpg' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80',
-        'psychology_money.jpg' => 'https://images.unsplash.com/photo-1592492159418-09f3133a96d6?w=600&auto=format&fit=crop&q=80',
-        'ikigai_book.jpg' => 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
-        'rich_dad_poor_dad.jpg' => 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&auto=format&fit=crop&q=80',
-        'sapiens_book.jpg' => 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=600&auto=format&fit=crop&q=80',
+        'atomic_habits.jpg' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80',
+        'psychology_money.jpg' => 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&auto=format&fit=crop&q=80',
+        'ikigai_book.jpg' => 'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=600&auto=format&fit=crop&q=80',
+        'rich_dad_poor_dad.jpg' => 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
+        'sapiens_book.jpg' => 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&auto=format&fit=crop&q=80',
         'ends_with_us.jpg' => 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=600&auto=format&fit=crop&q=80',
-        'alchemist_book.jpg' => 'https://images.unsplash.com/photo-1610116306796-6ebd7a48979d?w=600&auto=format&fit=crop&q=80',
-        'thinking_fast_slow.jpg' => 'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=600&auto=format&fit=crop&q=80',
-        'good_vibes_book.jpg' => 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&auto=format&fit=crop&q=80',
+        'alchemist_book.jpg' => 'https://images.unsplash.com/photo-1531988042231-d39a9cc12a9a?w=600&auto=format&fit=crop&q=80',
+        'thinking_fast_slow.jpg' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=80',
+        'good_vibes_book.jpg' => 'https://images.unsplash.com/photo-1495640388908-05fa85288e61?w=600&auto=format&fit=crop&q=80',
         'silent_patient.jpg' => 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&auto=format&fit=crop&q=80',
 
         // 8. Sports
         'cricket_ball.jpg' => 'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=600&auto=format&fit=crop&q=80',
-        'badminton_racket.jpg' => 'https://images.unsplash.com/photo-1613918431208-67507f9f8935?w=600&auto=format&fit=crop&q=80',
+        'badminton_racket.jpg' => 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&auto=format&fit=crop&q=80',
         'yoga_mat.jpg' => 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&auto=format&fit=crop&q=80',
         'gym_dumbbells.jpg' => 'https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?w=600&auto=format&fit=crop&q=80',
-        'football_ball.jpg' => 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&auto=format&fit=crop&q=80',
+        'football_ball.jpg' => 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&auto=format&fit=crop&q=80',
         'swimming_goggles.jpg' => 'https://images.unsplash.com/photo-1551244072-5d12893278ab?w=600&auto=format&fit=crop&q=80',
         'hydration_backpack.jpg' => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&auto=format&fit=crop&q=80',
         'skipping_rope.jpg' => 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&auto=format&fit=crop&q=80',
@@ -141,7 +141,7 @@ try {
         'study_desk.jpg' => 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&auto=format&fit=crop&q=80',
         'tv_cabinet.jpg' => 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600&auto=format&fit=crop&q=80',
         'wood_bookshelf.jpg' => 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&auto=format&fit=crop&q=80',
-        'chest_drawers.jpg' => 'https://images.unsplash.com/photo-1595428774754-cd7859b40f8e?w=600&auto=format&fit=crop&q=80',
+        'chest_drawers.jpg' => 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=600&auto=format&fit=crop&q=80',
         'shoe_rack.jpg' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80',
         'bean_bag.jpg' => 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&auto=format&fit=crop&q=80'
     ];
@@ -151,12 +151,20 @@ try {
         $destPath = $uploadsDir . $filename;
         if (!file_exists($destPath)) {
             echo "Downloading $filename...\n";
-            $imgData = @file_get_contents($url);
-            if ($imgData !== false) {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+            $imgData = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpCode === 200 && $imgData !== false) {
                 file_put_contents($destPath, $imgData);
                 echo "Successfully saved $filename.\n";
             } else {
-                echo "Failed to download $filename. Copying placeholder...\n";
+                echo "Failed to download $filename (HTTP $httpCode). Copying placeholder...\n";
                 @copy($uploadsDir . 'placeholder.png', $destPath);
             }
         } else {
